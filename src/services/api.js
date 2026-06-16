@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Get baseline API URL from environment variables
 const API_URL = import.meta.env.VITE_API_URL || 'https://forcereadyai-backend.vercel.app';
-
+console.log('API URL:', API_URL);
 const api = axios.create({
   baseURL: API_URL,
   headers: {
