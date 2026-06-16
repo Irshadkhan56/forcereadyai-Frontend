@@ -167,7 +167,7 @@ const Organizations = () => {
     }
   };
 
-  const handleFinish = () => navigate('/dashboard');
+  const handleFinish = () => navigate('/interviews');
 
   // ─── UI HELPERS ──────────────────────────────────────────────────────────
 
@@ -566,7 +566,7 @@ const Organizations = () => {
                 onClick={handleFinish}
                 className="w-full bg-primary-600 hover:bg-primary-500 text-white font-bold py-3.5 px-4 rounded-xl text-sm transition-all shadow-lg hover:shadow-primary-500/20 flex items-center justify-center gap-1.5 cursor-pointer"
               >
-                Go to Dashboard <ArrowRight className="w-4 h-4" />
+                Start Mock Interviews <ArrowRight className="w-4 h-4" />
               </button>
             </motion.div>
           )}
