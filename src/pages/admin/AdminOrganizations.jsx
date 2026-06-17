@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { getOrgsApi, createDeptApi, updateDeptApi, deleteDeptApi } from '../../services/adminService';
 import { Plus, Edit2, Trash2, X, AlertCircle, Sparkles } from 'lucide-react';
 

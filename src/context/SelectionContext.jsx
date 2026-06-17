@@ -5,11 +5,41 @@ const SelectionContext = createContext(null);
 
 export const SelectionProvider = ({ children }) => {
   const { user } = useAuth();
-  const [selectedDepartment, setSelectedDepartment] = useState(null);
-  const [selectedSubCategory, setSelectedSubCategory] = useState('');
-  const [selectedPosition, setSelectedPosition] = useState('');
+  const getInitialUser = () => {
+    try {
+      const storedUser = localStorage.getItem('user');
+      return storedUser ? JSON.parse(storedUser) : null;
+    } catch {
+      return null;
+    }
+  };
 
-  // Load selection from localStorage whenever user changes
+  const [selectedDepartment, setSelectedDepartment] = useState(() => {
+    const u = getInitialUser();
+    if (u?._id) {
+      const dept = localStorage.getItem(`selectedDept_${u._id}`);
+      return dept ? JSON.parse(dept) : null;
+    }
+    return null;
+  });
+
+  const [selectedSubCategory, setSelectedSubCategory] = useState(() => {
+    const u = getInitialUser();
+    if (u?._id) {
+      return localStorage.getItem(`selectedSub_${u._id}`) || '';
+    }
+    return '';
+  });
+
+  const [selectedPosition, setSelectedPosition] = useState(() => {
+    const u = getInitialUser();
+    if (u?._id) {
+      return localStorage.getItem(`selectedPos_${u._id}`) || '';
+    }
+    return '';
+  });
+
+  // Load selection from localStorage whenever user changes (keeps state synced on changes)
   useEffect(() => {
     if (user?._id) {
       const dept = localStorage.getItem(`selectedDept_${user._id}`);
