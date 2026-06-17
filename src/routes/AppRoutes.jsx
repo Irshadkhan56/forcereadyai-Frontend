@@ -23,8 +23,6 @@ import AdminLogin from '../pages/admin/AdminLogin';
 import AdminDashboard from '../pages/admin/AdminDashboard';
 import AdminUsers from '../pages/admin/AdminUsers';
 import AdminOrganizations from '../pages/admin/AdminOrganizations';
-import AdminCategories from '../pages/admin/AdminCategories';
-import AdminPositions from '../pages/admin/AdminPositions';
 import AdminQuestions from '../pages/admin/AdminQuestions';
 import AdminBookUpload from '../pages/admin/AdminBookUpload';
 import AdminAnalytics from '../pages/admin/AdminAnalytics';
@@ -56,9 +54,7 @@ const AppRoutes = () => {
       >
         <Route index element={<AdminDashboard />} />
         <Route path="users" element={<AdminUsers />} />
-        <Route path="organizations" element={<AdminOrganizations />} />
-        <Route path="categories" element={<AdminCategories />} />
-        <Route path="positions" element={<AdminPositions />} />
+        <Route path="departments" element={<AdminOrganizations />} />
         <Route path="questions" element={<AdminQuestions />} />
         <Route path="upload-book" element={<AdminBookUpload />} />
         <Route path="analytics" element={<AdminAnalytics />} />
@@ -73,11 +69,14 @@ const AppRoutes = () => {
         }
       >
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/organizations" element={<Organizations />} />
-        <Route path="/interviews" element={<MockInterviews />} />
-        <Route path="/progress/physical" element={<PhysicalPlan />} />
-        <Route path="/progress/medical" element={<MedicalChecklist />} />
-        <Route path="/progress/readiness" element={<ReadinessHub />} />
+        <Route path="/departments" element={<Organizations />} />
+        
+        {/* SEO Friendly Department Routes */}
+        <Route path="/department/:slug" element={<ReadinessHub />} />
+        <Route path="/department/:slug/interview" element={<MockInterviews />} />
+        <Route path="/department/:slug/medical" element={<MedicalChecklist />} />
+        <Route path="/department/:slug/physical" element={<PhysicalPlan />} />
+
         <Route path="/profile" element={<Profile />} />
       </Route>
 

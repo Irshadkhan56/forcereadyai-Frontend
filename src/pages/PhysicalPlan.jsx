@@ -19,7 +19,7 @@ import {
 
 const PhysicalPlan = () => {
   const queryClient = useQueryClient();
-  const { selectedPosition } = useSelection();
+  const { selectedDepartment, selectedSubCategory, selectedPosition } = useSelection();
 
   // Keep track of which exercise index is being edited inline
   const [editingId, setEditingId] = useState(null);
@@ -28,19 +28,25 @@ const PhysicalPlan = () => {
 
   // 1. Fetch User Physical Progress
   const { data: progressData, isLoading, error } = useQuery({
-    queryKey: ['physicalProgress', selectedPosition?._id],
+    queryKey: ['physicalProgress', selectedDepartment?._id, selectedSubCategory, selectedPosition],
     queryFn: async () => {
-      const res = await api.get(`/progress/physical?positionId=${selectedPosition._id}`);
+      const res = await api.get(`/physical-tests/progress`, {
+        params: {
+          departmentId: selectedDepartment._id,
+          subCategory: selectedSubCategory,
+          position: selectedPosition,
+        },
+      });
       return res.data.data;
     },
-    enabled: !!selectedPosition?._id,
+    enabled: !!selectedDepartment?._id,
   });
 
   // 2. Update Progress Mutation
   const updateProgressMutation = useMutation({
     mutationFn: async ({ exerciseId, currentValue, completed }) => {
-      const res = await api.put('/progress/physical', {
-        positionId: selectedPosition._id,
+      const res = await api.put('/physical-tests/progress', {
+        departmentId: selectedDepartment._id,
         exerciseId,
         currentValue,
         completed,
@@ -48,7 +54,7 @@ const PhysicalPlan = () => {
       return res.data.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['physicalProgress', selectedPosition?._id]);
+      queryClient.invalidateQueries({ queryKey: ['physicalProgress', selectedDepartment?._id, selectedSubCategory, selectedPosition] });
       setEditingId(null);
     },
     onError: (err) => {
@@ -80,17 +86,17 @@ const PhysicalPlan = () => {
   };
 
   // Guard: No selection
-  if (!selectedPosition) {
+  if (!selectedDepartment || (selectedDepartment.hasSubCategories && (!selectedSubCategory || !selectedPosition))) {
     return (
       <div className="glass-panel p-10 rounded-2xl text-center space-y-5 max-w-lg mx-auto">
         <Lock className="w-12 h-12 text-primary-500 mx-auto" />
-        <h2 className="text-xl font-bold text-white">Target Position Required</h2>
+        <h2 className="text-xl font-bold text-white">Target Selection Required</h2>
         <p className="text-gray-400 text-xs leading-relaxed">
-          You must set your active target force position before tracking physical training goals.
+          You must set your active target force department and entry/post before tracking physical training goals.
         </p>
         <div className="pt-2">
           <Link
-            to="/organizations"
+            to="/departments"
             className="inline-flex items-center gap-1.5 px-6 py-3.5 bg-primary-600 hover:bg-primary-500 text-white font-bold rounded-xl text-xs transition-all shadow-md"
           >
             Open Selection Wizard <ChevronRight className="w-4 h-4" />
@@ -135,7 +141,7 @@ const PhysicalPlan = () => {
             <Activity className="w-4 h-4" /> Training Schedule
           </div>
           <h1 className="text-2xl font-extrabold text-white">
-            Physical Preparation Plan: <span className="text-emerald-500">{progressData.position?.name}</span>
+            Physical Preparation Plan: <span className="text-emerald-500">{selectedDepartment?.name}{selectedPosition ? ` - ${selectedPosition}` : ''}</span>
           </h1>
           <p className="text-gray-400 text-sm max-w-xl">
             Complete the targets set by selection boards. Keep track of your timing records and reps to secure physical clearance.

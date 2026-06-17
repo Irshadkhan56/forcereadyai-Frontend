@@ -5,80 +5,79 @@ const SelectionContext = createContext(null);
 
 export const SelectionProvider = ({ children }) => {
   const { user } = useAuth();
-  const [selectedOrg, setSelectedOrg] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedPosition, setSelectedPosition] = useState(null);
+  const [selectedDepartment, setSelectedDepartment] = useState(null);
+  const [selectedSubCategory, setSelectedSubCategory] = useState('');
+  const [selectedPosition, setSelectedPosition] = useState('');
 
   // Load selection from localStorage whenever user changes
   useEffect(() => {
     if (user?._id) {
-      const org = localStorage.getItem(`selectedOrg_${user._id}`);
-      const cat = localStorage.getItem(`selectedCategory_${user._id}`);
-      const pos = localStorage.getItem(`selectedPosition_${user._id}`);
+      const dept = localStorage.getItem(`selectedDept_${user._id}`);
+      const sub = localStorage.getItem(`selectedSub_${user._id}`);
+      const pos = localStorage.getItem(`selectedPos_${user._id}`);
 
-      setSelectedOrg(org ? JSON.parse(org) : null);
-      setSelectedCategory(cat ? JSON.parse(cat) : null);
-      setSelectedPosition(pos ? JSON.parse(pos) : null);
+      setSelectedDepartment(dept ? JSON.parse(dept) : null);
+      setSelectedSubCategory(sub || '');
+      setSelectedPosition(pos || '');
     } else {
-      setSelectedOrg(null);
-      setSelectedCategory(null);
-      setSelectedPosition(null);
+      setSelectedDepartment(null);
+      setSelectedSubCategory('');
+      setSelectedPosition('');
     }
   }, [user]);
 
-  // Save setters
-  const selectOrg = (org) => {
+  // Setters
+  const selectDepartment = (dept) => {
     if (!user?._id) return;
-    if (org) {
-      localStorage.setItem(`selectedOrg_${user._id}`, JSON.stringify(org));
+    if (dept) {
+      localStorage.setItem(`selectedDept_${user._id}`, JSON.stringify(dept));
     } else {
-      localStorage.removeItem(`selectedOrg_${user._id}`);
+      localStorage.removeItem(`selectedDept_${user._id}`);
     }
-    setSelectedOrg(org);
-    // Reset child selection if org changes
-    selectCategory(null);
-    selectPosition(null);
+    setSelectedDepartment(dept);
+    // Reset downstream fields on department change
+    selectSubCategory('');
+    selectPosition('');
   };
 
-  const selectCategory = (cat) => {
+  const selectSubCategory = (sub) => {
     if (!user?._id) return;
-    if (cat) {
-      localStorage.setItem(`selectedCategory_${user._id}`, JSON.stringify(cat));
+    if (sub) {
+      localStorage.setItem(`selectedSub_${user._id}`, sub);
     } else {
-      localStorage.removeItem(`selectedCategory_${user._id}`);
+      localStorage.removeItem(`selectedSub_${user._id}`);
     }
-    setSelectedCategory(cat);
-    // Reset child selection if category changes
-    selectPosition(null);
+    setSelectedSubCategory(sub);
+    selectPosition(''); // Reset position on subcategory change
   };
 
   const selectPosition = (pos) => {
     if (!user?._id) return;
     if (pos) {
-      localStorage.setItem(`selectedPosition_${user._id}`, JSON.stringify(pos));
+      localStorage.setItem(`selectedPos_${user._id}`, pos);
     } else {
-      localStorage.removeItem(`selectedPosition_${user._id}`);
+      localStorage.removeItem(`selectedPos_${user._id}`);
     }
     setSelectedPosition(pos);
   };
 
   const clearSelection = () => {
     if (user?._id) {
-      localStorage.removeItem(`selectedOrg_${user._id}`);
-      localStorage.removeItem(`selectedCategory_${user._id}`);
-      localStorage.removeItem(`selectedPosition_${user._id}`);
+      localStorage.removeItem(`selectedDept_${user._id}`);
+      localStorage.removeItem(`selectedSub_${user._id}`);
+      localStorage.removeItem(`selectedPos_${user._id}`);
     }
-    setSelectedOrg(null);
-    setSelectedCategory(null);
-    setSelectedPosition(null);
+    setSelectedDepartment(null);
+    setSelectedSubCategory('');
+    setSelectedPosition('');
   };
 
   const value = {
-    selectedOrg,
-    selectedCategory,
+    selectedDepartment,
+    selectedSubCategory,
     selectedPosition,
-    selectOrg,
-    selectCategory,
+    selectDepartment,
+    selectSubCategory,
     selectPosition,
     clearSelection,
   };

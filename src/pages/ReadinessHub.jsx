@@ -1,6 +1,7 @@
+import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useSelection } from '../context/SelectionContext';
-import { Link } from 'react-router-dom';
 import api from '../services/api';
 import { motion } from 'framer-motion';
 import {
@@ -10,64 +11,80 @@ import {
   HeartPulse,
   ChevronRight,
   Loader2,
-  CheckCircle,
-  HelpCircle,
   AlertCircle,
-  Lock,
-  ArrowRight,
   TrendingUp,
+  Shield,
+  ArrowLeft,
+  Settings,
 } from 'lucide-react';
 
 const ReadinessHub = () => {
-  const { selectedPosition } = useSelection();
+  const { slug } = useParams();
+  const navigate = useNavigate();
+  const {
+    selectedDepartment,
+    selectedSubCategory,
+    selectedPosition,
+    selectDepartment,
+  } = useSelection();
 
-  // Fetch Overall Readiness Score and details
-  const { data: readinessData, isLoading, error } = useQuery({
-    queryKey: ['readinessScores', selectedPosition?._id],
+  // 1. Fetch Department Details by Slug
+  const { data: department, isLoading: loadingDept, error: deptError } = useQuery({
+    queryKey: ['departmentDetails', slug],
     queryFn: async () => {
-      const res = await api.get('/progress/readiness');
+      const res = await api.get(`/departments/${slug}`);
       return res.data.data;
     },
-    enabled: !!selectedPosition?._id,
+    enabled: !!slug,
   });
 
-  // Guard: No selection
-  if (!selectedPosition) {
-    return (
-      <div className="glass-panel p-10 rounded-2xl text-center space-y-5 max-w-lg mx-auto">
-        <Lock className="w-12 h-12 text-primary-500 mx-auto" />
-        <h2 className="text-xl font-bold text-white">Target Position Required</h2>
-        <p className="text-gray-400 text-xs leading-relaxed">
-          You must set your active target force position before reviewing your overall readiness scorecard.
-        </p>
-        <div className="pt-2">
-          <Link
-            to="/organizations"
-            className="inline-flex items-center gap-1.5 px-6 py-3.5 bg-primary-600 hover:bg-primary-500 text-white font-bold rounded-xl text-xs transition-all shadow-md"
-          >
-            Open Selection Wizard <ChevronRight className="w-4 h-4" />
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  // 2. Auto-activate department selection
+  useEffect(() => {
+    if (department && selectedDepartment?._id !== department._id) {
+      if (department.hasSubCategories) {
+        // Army has sub-categories; requires completing the wizard first
+        navigate('/departments');
+      } else {
+        // Auto-select for direct departments
+        selectDepartment(department);
+      }
+    }
+  }, [department, selectedDepartment, navigate, selectDepartment]);
 
-  // Loader state
-  if (isLoading) {
+  // 3. Fetch Readiness Score filtered by this department/track
+  const { data: readinessData, isLoading: loadingReadiness, error: readinessError } = useQuery({
+    queryKey: ['readinessScores', department?._id, selectedSubCategory, selectedPosition],
+    queryFn: async () => {
+      const res = await api.get('/progress/readiness', {
+        params: {
+          departmentId: department._id,
+          subCategory: selectedSubCategory,
+          position: selectedPosition,
+        },
+      });
+      return res.data.data;
+    },
+    enabled: !!department?._id,
+  });
+
+  if (loadingDept || loadingReadiness) {
     return (
       <div className="flex flex-col items-center justify-center py-20 gap-3">
         <Loader2 className="w-8 h-8 text-primary-500 animate-spin" />
-        <p className="text-gray-500 text-sm">Gathering readiness statistics...</p>
+        <p className="text-gray-500 text-sm">Gathering department statistics...</p>
       </div>
     );
   }
 
-  if (error) {
+  if (deptError || !department) {
     return (
       <div className="glass-panel p-8 rounded-2xl border border-red-500/10 text-center text-red-400 space-y-3 max-w-lg mx-auto">
         <AlertCircle className="w-12 h-12 text-red-500/40 mx-auto" />
-        <h3 className="font-bold text-white">Hub Loading Failed</h3>
-        <p className="text-xs">{error.response?.data?.message || 'Could not fetch calculation results.'}</p>
+        <h3 className="font-bold text-white">Department Not Found</h3>
+        <p className="text-xs">The department slug you requested does not exist or has been deactivated.</p>
+        <Link to="/departments" className="mt-4 px-4 py-2 bg-gray-900 border border-gray-800 rounded-lg text-white text-xs hover:bg-gray-800 inline-flex items-center gap-1.5">
+          <ArrowLeft className="w-4 h-4" /> Back to Departments
+        </Link>
       </div>
     );
   }
@@ -85,42 +102,66 @@ const ReadinessHub = () => {
     medical: { totalCriteria: 0, passedCriteria: 0, failedCriteria: 0, uncheckedCriteria: 0 },
   };
 
-  // SVG circular properties
+  // SVG circular progress settings
   const radius = 60;
   const strokeWidth = 10;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (progress.overallReadiness / 100) * circumference;
 
-  // Recommendations generator
-  let alertRecommendation = null;
+  let alertRecommendation = `Standard recommendation track active for ${department.name}.`;
   if (details.medical.failedCriteria > 0) {
-    alertRecommendation = `Attention: You have ${details.medical.failedCriteria} failed medical standard(s) (e.g. vision or chest requirements). Review the checklist logs carefully and consult a doctor.`;
+    alertRecommendation = `Attention: You have ${details.medical.failedCriteria} failed medical checklist criteria. Review guidelines and consult medical officers.`;
   } else if (progress.overallReadiness < 60) {
-    alertRecommendation = "Advice: Your overall readiness score is below 60%. Engage in more AI Mock Interviews and mark physical tasks as complete to boost your profile.";
+    alertRecommendation = "Advice: Your overall readiness is below 60%. Take mock interviews and log completed physical workouts to boost your score.";
   } else {
-    alertRecommendation = "Candidate Status: Excellent progress! Keep maintaining your workouts and mock scores to ensure final board recommendation.";
+    alertRecommendation = "Status: Strong progress! Maintain consistent physical logs and score targets to qualify.";
   }
 
   return (
     <div className="space-y-8">
-      {/* HEADER */}
-      <div>
-        <h1 className="text-2xl font-extrabold text-white">Forces Readiness Index</h1>
-        <p className="text-gray-400 text-xs mt-1">Weighted evaluation score calculated dynamically based on target standards</p>
+      {/* DEPARTMENT TOP BANNER */}
+      <div className="relative h-48 md:h-64 rounded-3xl overflow-hidden border border-gray-800 shadow-2xl flex items-end">
+        <img
+          src={department.banner || 'https://images.unsplash.com/photo-1590247813693-5541d1c609fd?auto=format&fit=crop&q=80&w=1200'}
+          alt="Department Banner"
+          className="absolute inset-0 w-full h-full object-cover brightness-[0.4]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-dark-950 via-dark-950/20 to-transparent pointer-events-none" />
+        
+        <div className="relative z-10 p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-4 w-full">
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 text-white font-extrabold text-2xl shadow-xl flex-shrink-0">
+              {department.name.charAt(0)}
+            </div>
+            <div>
+              <h1 className="text-xl md:text-3xl font-black text-white">{department.name}</h1>
+              <p className="text-xs text-gray-300 max-w-xl line-clamp-2 mt-1">{department.description}</p>
+            </div>
+          </div>
+          {department.hasSubCategories && (
+            <Link
+              to="/departments"
+              className="flex items-center gap-1.5 px-4 py-2 border border-white/10 hover:border-white/20 bg-white/5 hover:bg-white/10 text-white text-xs font-bold rounded-xl transition-all w-fit self-end md:self-auto cursor-pointer"
+            >
+              <Settings className="w-4 h-4" /> Change Post ({selectedPosition || 'None'})
+            </Link>
+          )}
+        </div>
       </div>
 
+      {/* METRICS & GAUGE ROW */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-        {/* LEFT CARD: Overall Readiness Gauge */}
-        <div className="glass-panel p-8 rounded-2xl border border-gray-850 space-y-6 text-center flex flex-col items-center">
+        {/* Readiness Index circular gauge */}
+        <div className="glass-panel p-8 rounded-2xl border border-gray-850 flex flex-col items-center justify-center text-center space-y-5">
           <div>
-            <h3 className="font-bold text-white text-base">Overall Preparedness</h3>
-            <p className="text-gray-500 text-xs mt-0.5">{selectedPosition.name} standard</p>
+            <h3 className="font-extrabold text-white text-sm">Overall Preparedness</h3>
+            <p className="text-gray-500 text-[10px] uppercase font-bold tracking-wider mt-0.5">
+              {selectedPosition || 'General Standard'}
+            </p>
           </div>
 
-          {/* SVG Gauge */}
           <div className="relative w-36 h-36 flex items-center justify-center my-2">
             <svg className="w-full h-full transform -rotate-90">
-              {/* Background ring */}
               <circle
                 cx="72"
                 cy="72"
@@ -129,12 +170,11 @@ const ReadinessHub = () => {
                 strokeWidth={strokeWidth}
                 fill="transparent"
               />
-              {/* Progress ring */}
               <circle
                 cx="72"
                 cy="72"
                 r={radius}
-                stroke="url(#grad)"
+                stroke="url(#deptGrad)"
                 strokeWidth={strokeWidth}
                 fill="transparent"
                 strokeDasharray={circumference}
@@ -143,9 +183,9 @@ const ReadinessHub = () => {
                 className="transition-all duration-1000 ease-out"
               />
               <defs>
-                <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#60a5fa" />
-                  <stop offset="100%" stopColor="#2563eb" />
+                <linearGradient id="deptGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#3b82f6" />
+                  <stop offset="100%" stopColor="#10b981" />
                 </linearGradient>
               </defs>
             </svg>
@@ -155,16 +195,14 @@ const ReadinessHub = () => {
             </div>
           </div>
 
-          {/* Formula info */}
-          <div className="text-[10px] text-gray-500 leading-relaxed max-w-[200px] border-t border-gray-850 pt-4 w-full">
-            Readiness formula: <br />
-            <span className="text-gray-400 font-semibold">40% Interview + 40% Physical + 20% Medical Check</span>
+          <div className="text-[10px] text-gray-500 leading-normal border-t border-gray-850 pt-4 w-full">
+            Weighted metrics: <br />
+            <span className="text-gray-400 font-semibold">40% Interview + 40% Physical + 20% Medical</span>
           </div>
         </div>
 
-        {/* RIGHT CARDS: Detailed breakdown & guidelines */}
+        {/* Breakdown of Prep Modules */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Recommendation Banner */}
           <div className={`p-4 rounded-xl border flex items-start gap-3 text-xs leading-normal font-semibold ${
             details.medical.failedCriteria > 0
               ? 'bg-red-500/10 border-red-500/20 text-red-400'
@@ -176,69 +214,69 @@ const ReadinessHub = () => {
             <span>{alertRecommendation}</span>
           </div>
 
-          {/* Detailed breakdowns */}
+          {/* Cards for each track */}
           <div className="space-y-4">
-            {/* 1. Interview section */}
+            {/* 1. Interview practice */}
             <div className="glass-panel p-5 rounded-2xl border border-gray-850 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div className="flex gap-4">
                 <div className="w-10 h-10 rounded-xl bg-purple-500/15 border border-purple-500/25 flex items-center justify-center text-purple-400 flex-shrink-0">
                   <MessageSquareText className="w-5 h-5" />
                 </div>
-                <div className="space-y-1">
-                  <h4 className="font-bold text-sm text-white">AI Mock Interview Board</h4>
-                  <p className="text-xs text-gray-500">Total Completed: {details.interviews.totalCompleted} sessions</p>
+                <div>
+                  <h4 className="font-bold text-sm text-white">Interview Practice</h4>
+                  <p className="text-[10px] text-gray-500 mt-0.5">Mock questions and AI verbal evaluation</p>
                 </div>
               </div>
               <div className="flex items-center gap-5 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-t-0 border-gray-850 pt-3 sm:pt-0">
                 <div className="text-right">
-                  <span className="text-xs text-gray-500 block">Mock Average</span>
-                  <span className="text-sm font-bold text-purple-400">{progress.interviewReadiness}% score</span>
+                  <span className="text-[10px] text-gray-500 block uppercase font-bold">Mock Average</span>
+                  <span className="text-xs font-bold text-purple-400">{progress.interviewReadiness}% score</span>
                 </div>
-                <Link to="/interviews" className="p-2 border border-gray-850 hover:border-gray-800 rounded-xl text-gray-400 hover:text-white transition-all">
+                <Link to={`/department/${slug}/interview`} className="p-2 border border-gray-850 hover:border-gray-800 rounded-xl text-gray-400 hover:text-white transition-all cursor-pointer">
                   <ChevronRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>
 
-            {/* 2. Physical section */}
+            {/* 2. Physical Practice */}
             <div className="glass-panel p-5 rounded-2xl border border-gray-850 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div className="flex gap-4">
                 <div className="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/25 flex items-center justify-center text-emerald-400 flex-shrink-0">
                   <Activity className="w-5 h-5" />
                 </div>
-                <div className="space-y-1">
-                  <h4 className="font-bold text-sm text-white">Physical Training Goals</h4>
-                  <p className="text-xs text-gray-500">Completed Exercises: {details.physical.completedExercises} of {details.physical.totalExercises}</p>
+                <div>
+                  <h4 className="font-bold text-sm text-white">Physical Preparation</h4>
+                  <p className="text-[10px] text-gray-500 mt-0.5">Physical test targets and workout logging</p>
                 </div>
               </div>
               <div className="flex items-center gap-5 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-t-0 border-gray-850 pt-3 sm:pt-0">
                 <div className="text-right">
-                  <span className="text-xs text-gray-500 block">Training Completion</span>
-                  <span className="text-sm font-bold text-emerald-400">{progress.physicalReadiness}% goals met</span>
+                  <span className="text-[10px] text-gray-500 block uppercase font-bold">Training Completion</span>
+                  <span className="text-xs font-bold text-emerald-400">{progress.physicalReadiness}% goals met</span>
                 </div>
-                <Link to="/progress/physical" className="p-2 border border-gray-850 hover:border-gray-800 rounded-xl text-gray-400 hover:text-white transition-all">
+                <Link to={`/department/${slug}/physical`} className="p-2 border border-gray-850 hover:border-gray-800 rounded-xl text-gray-400 hover:text-white transition-all cursor-pointer">
                   <ChevronRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>
 
-            {/* 3. Medical section */}
+            {/* 3. Medical checklist */}
             <div className="glass-panel p-5 rounded-2xl border border-gray-850 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div className="flex gap-4">
                 <div className="w-10 h-10 rounded-xl bg-rose-500/15 border border-rose-500/25 flex items-center justify-center text-rose-400 flex-shrink-0">
                   <HeartPulse className="w-5 h-5" />
                 </div>
-                <div className="space-y-1">
-                  <h4 className="font-bold text-sm text-white">Medical Checklist Standards</h4>
-                  <p className="text-xs text-gray-500">Passed: {details.medical.passedCriteria} | Failed: {details.medical.failedCriteria} | Unchecked: {details.medical.uncheckedCriteria}</p>
+                <div>
+                  <h4 className="font-bold text-sm text-white">Medical Checklist</h4>
+                  <p className="text-[10px] text-gray-500 mt-0.5">Medical fitness checklist pre-validation</p>
                 </div>
               </div>
               <div className="flex items-center gap-5 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-t-0 border-gray-850 pt-3 sm:pt-0">
                 <div className="text-right">
-                  <span className="text-xs text-gray-500 block">Pre-validation Rate</span>
-                  <span className="text-sm font-bold text-rose-400">{progress.medicalReadiness}% passed</span>
+                  <span className="text-[10px] text-gray-500 block uppercase font-bold">Pre-check Status</span>
+                  <span className="text-xs font-bold text-rose-400">{progress.medicalReadiness}% passed</span>
                 </div>
-                <Link to="/progress/medical" className="p-2 border border-gray-850 hover:border-gray-800 rounded-xl text-gray-400 hover:text-white transition-all">
+                <Link to={`/department/${slug}/medical`} className="p-2 border border-gray-850 hover:border-gray-800 rounded-xl text-gray-400 hover:text-white transition-all cursor-pointer">
                   <ChevronRight className="w-4 h-4" />
                 </Link>
               </div>

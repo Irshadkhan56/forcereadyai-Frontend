@@ -1,93 +1,59 @@
 import { useState, useEffect } from 'react';
-import {
-  getOrgsApi,
-  getCategoriesApi,
-  getPositionsApi,
-  createQuestionApi
-} from '../../services/adminService';
-import {
-  Plus,
-  X,
-  AlertCircle,
-  HelpCircle,
-  CheckCircle2
-} from 'lucide-react';
+import { getOrgsApi, createQuestionApi } from '../../services/adminService';
+import { Plus, X, AlertCircle, HelpCircle, CheckCircle2 } from 'lucide-react';
 
 const AdminQuestions = () => {
   const [organizations, setOrganizations] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [positions, setPositions] = useState([]);
+  const [selectedDeptObj, setSelectedDeptObj] = useState(null);
 
   // Form modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [formData, setFormData] = useState({
-    organization: '',
-    category: '',
+    departmentId: '',
+    subCategory: '',
     position: '',
     question: '',
     idealAnswer: '',
     difficulty: 'medium',
     tags: ''
   });
-  const [formCategories, setFormCategories] = useState([]);
-  const [formPositions, setFormPositions] = useState([]);
   const [formError, setFormError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  // Fetch initial organizations list
+  // Fetch initial departments list
   useEffect(() => {
     const fetchOrgs = async () => {
       try {
         const res = await getOrgsApi();
-        setOrganizations(res.data || res);
+        const depts = res.data || res;
+        setOrganizations(depts);
       } catch (err) {
-        setFormError('Failed to load organizations.');
+        setFormError('Failed to load departments.');
       }
     };
     fetchOrgs();
   }, []);
 
-  // Form: load categories on org change
+  // Update selected department object when departmentId changes
   useEffect(() => {
-    const fetchFormCategories = async () => {
-      if (!formData.organization) {
-        setFormCategories([]);
-        setFormData(prev => ({ ...prev, category: '', position: '' }));
-        return;
-      }
-      try {
-        const res = await getCategoriesApi(formData.organization);
-        setFormCategories(res.data || res);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchFormCategories();
-  }, [formData.organization]);
-
-  // Form: load positions on category change
-  useEffect(() => {
-    const fetchFormPositions = async () => {
-      if (!formData.category || !formData.organization) {
-        setFormPositions([]);
-        setFormData(prev => ({ ...prev, position: '' }));
-        return;
-      }
-      try {
-        const res = await getPositionsApi(formData.category, formData.organization);
-        setFormPositions(res.data || res);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchFormPositions();
-  }, [formData.category, formData.organization]);
+    if (!formData.departmentId) {
+      setSelectedDeptObj(null);
+      return;
+    }
+    const dept = organizations.find(o => o._id === formData.departmentId);
+    setSelectedDeptObj(dept || null);
+    
+    // Clear subCategory/position if changing to a department without subcategories
+    if (dept && !dept.hasSubCategories) {
+      setFormData(prev => ({ ...prev, subCategory: '', position: '' }));
+    }
+  }, [formData.departmentId, organizations]);
 
   const openAddModal = () => {
     setFormData({
-      organization: organizations[0]?._id || '',
-      category: '',
+      departmentId: organizations[0]?._id || '',
+      subCategory: '',
       position: '',
       question: '',
       idealAnswer: '',
@@ -101,13 +67,20 @@ const AdminQuestions = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData(prev => {
+      const updated = { ...prev, [name]: value };
+      // Reset position if subCategory changes
+      if (name === 'subCategory') {
+        updated.position = '';
+      }
+      return updated;
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.organization || !formData.category || !formData.question) {
-      setFormError('Organization, Category, and Question text are required');
+    if (!formData.departmentId || !formData.question || !formData.idealAnswer) {
+      setFormError('Department, question, and ideal answer text are required');
       return;
     }
 
@@ -121,9 +94,13 @@ const AdminQuestions = () => {
       : [];
 
     const submitData = {
-      ...formData,
-      tags: tagsArray,
-      position: formData.position || null
+      departmentId: formData.departmentId,
+      subCategory: selectedDeptObj?.hasSubCategories ? formData.subCategory : '',
+      position: selectedDeptObj?.hasSubCategories ? formData.position : '',
+      question: formData.question,
+      idealAnswer: formData.idealAnswer,
+      difficulty: formData.difficulty,
+      tags: tagsArray
     };
 
     try {
@@ -131,10 +108,10 @@ const AdminQuestions = () => {
       setIsModalOpen(false);
       setSuccessMessage('Question added successfully and saved directly to MongoDB!');
       
-      // Reset form
+      // Reset form (keep active selections for easier bulk entries)
       setFormData({
-        organization: formData.organization,
-        category: formData.category,
+        departmentId: formData.departmentId,
+        subCategory: formData.subCategory,
         position: formData.position,
         question: '',
         idealAnswer: '',
@@ -147,6 +124,12 @@ const AdminQuestions = () => {
       setSubmitting(false);
     }
   };
+
+  // Army subcategories and positions
+  const armySubs = ['Officer', 'Soldier'];
+  const armyPositions = formData.subCategory === 'Officer'
+    ? ['PMA Long Course', 'Lady Cadet Course (LCC)', 'Technical Cadet Course (TCC)', 'Short Service Commission']
+    : ['General Duty Soldier', 'Clerk', 'Driver', 'Military Police', 'Technical Trade'];
 
   return (
     <div className="space-y-6">
@@ -217,59 +200,66 @@ const AdminQuestions = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-gray-450 text-xs font-semibold uppercase tracking-wider">
-                    Organization *
+                  <label className="text-gray-455 text-xs font-semibold uppercase tracking-wider">
+                    Department *
                   </label>
                   <select
-                    name="organization"
-                    value={formData.organization}
+                    name="departmentId"
+                    value={formData.departmentId}
                     onChange={handleInputChange}
                     className="glass-input rounded-xl py-2 px-3 text-sm text-white focus:outline-none cursor-pointer"
                     required
                   >
-                    <option value="">Select Organization</option>
+                    <option value="">Select Department</option>
                     {organizations.map((org) => (
                       <option key={org._id} value={org._id}>{org.name}</option>
                     ))}
                   </select>
                 </div>
 
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-gray-455 text-xs font-semibold uppercase tracking-wider">
-                    Category *
-                  </label>
-                  <select
-                    name="category"
-                    value={formData.category}
-                    onChange={handleInputChange}
-                    className="glass-input rounded-xl py-2 px-3 text-sm text-white focus:outline-none cursor-pointer"
-                    disabled={!formData.organization}
-                    required
-                  >
-                    <option value="">Select Category</option>
-                    {formCategories.map((cat) => (
-                      <option key={cat._id} value={cat._id}>{cat.name}</option>
-                    ))}
-                  </select>
-                </div>
+                {selectedDeptObj?.hasSubCategories ? (
+                  <>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-gray-455 text-xs font-semibold uppercase tracking-wider">
+                        Sub Category *
+                      </label>
+                      <select
+                        name="subCategory"
+                        value={formData.subCategory}
+                        onChange={handleInputChange}
+                        className="glass-input rounded-xl py-2 px-3 text-sm text-white focus:outline-none cursor-pointer"
+                        required
+                      >
+                        <option value="">Select Sub Category</option>
+                        {armySubs.map((sub) => (
+                          <option key={sub} value={sub}>{sub}</option>
+                        ))}
+                      </select>
+                    </div>
 
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-gray-455 text-xs font-semibold uppercase tracking-wider">
-                    Position (Optional)
-                  </label>
-                  <select
-                    name="position"
-                    value={formData.position}
-                    onChange={handleInputChange}
-                    className="glass-input rounded-xl py-2 px-3 text-sm text-white focus:outline-none cursor-pointer"
-                    disabled={!formData.category}
-                  >
-                    <option value="">All Positions / Generic</option>
-                    {formPositions.map((pos) => (
-                      <option key={pos._id} value={pos._id}>{pos.name}</option>
-                    ))}
-                  </select>
-                </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-gray-455 text-xs font-semibold uppercase tracking-wider">
+                        Position / Post *
+                      </label>
+                      <select
+                        name="position"
+                        value={formData.position}
+                        onChange={handleInputChange}
+                        className="glass-input rounded-xl py-2 px-3 text-sm text-white focus:outline-none cursor-pointer"
+                        required
+                      >
+                        <option value="">Select Position</option>
+                        {armyPositions.map((pos) => (
+                          <option key={pos} value={pos}>{pos}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </>
+                ) : (
+                  <div className="col-span-2 text-xs text-gray-500 flex items-center bg-gray-950/20 px-4 py-2.5 rounded-xl border border-gray-850/40">
+                    This department uses a direct layout with no subcategories or positions.
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

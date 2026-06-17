@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
   getOrgsApi,
-  getCategoriesApi,
-  getPositionsApi,
   uploadBookApi,
   importQuestionsApi
 } from '../../services/adminService';
@@ -20,13 +18,12 @@ import {
 const AdminBookUpload = () => {
   const [activeTab, setActiveTab] = useState('book'); // 'book' or 'json'
   const [organizations, setOrganizations] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [positions, setPositions] = useState([]);
+  const [selectedDeptObj, setSelectedDeptObj] = useState(null);
 
   // Form states (Book Upload)
   const [orgId, setOrgId] = useState('');
-  const [catId, setCatId] = useState('');
-  const [posId, setPosId] = useState('');
+  const [subCategory, setSubCategory] = useState('');
+  const [position, setPosition] = useState('');
   const [difficulty, setDifficulty] = useState('medium');
   const [file, setFile] = useState(null);
 
@@ -42,60 +39,34 @@ const AdminBookUpload = () => {
   const [error, setError] = useState('');
   const [dragOver, setDragOver] = useState(false);
 
-  // Fetch initial organizations list
+  // Fetch initial departments list
   useEffect(() => {
     const fetchOrgs = async () => {
       try {
         const res = await getOrgsApi();
         setOrganizations(res.data || res);
       } catch (err) {
-        setError('Failed to load organizations.');
+        setError('Failed to load departments.');
       }
     };
     fetchOrgs();
   }, []);
 
-  // Fetch categories when organization changes
+  // Update selected department object
   useEffect(() => {
-    const fetchCategories = async () => {
-      if (!orgId) {
-        setCategories([]);
-        setCatId('');
-        return;
-      }
-      try {
-        const res = await getCategoriesApi(orgId);
-        const catList = res.data || res;
-        setCategories(catList);
-        if (catList.length > 0) {
-          setCatId(catList[0]._id);
-        } else {
-          setCatId('');
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchCategories();
-  }, [orgId]);
-
-  // Fetch positions when category changes
-  useEffect(() => {
-    const fetchPositions = async () => {
-      if (!catId || !orgId) {
-        setPositions([]);
-        setPosId('');
-        return;
-      }
-      try {
-        const res = await getPositionsApi(catId, orgId);
-        setPositions(res.data || res);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchPositions();
-  }, [catId, orgId]);
+    if (!orgId) {
+      setSelectedDeptObj(null);
+      setSubCategory('');
+      setPosition('');
+      return;
+    }
+    const dept = organizations.find(o => o._id === orgId);
+    setSelectedDeptObj(dept || null);
+    if (dept && !dept.hasSubCategories) {
+      setSubCategory('');
+      setPosition('');
+    }
+  }, [orgId, organizations]);
 
   // Drag and Drop handlers
   const handleDragOver = (e) => {
@@ -139,8 +110,8 @@ const AdminBookUpload = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!orgId || !catId || !file) {
-      setError('Please select organization, category, and choose a valid file.');
+    if (!orgId || !file) {
+      setError('Please select a department and choose a valid file.');
       return;
     }
 
@@ -150,10 +121,12 @@ const AdminBookUpload = () => {
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('organization', orgId);
-    formData.append('category', catId);
+    formData.append('departmentId', orgId);
     formData.append('difficulty', difficulty);
-    if (posId) formData.append('position', posId);
+    if (selectedDeptObj?.hasSubCategories) {
+      formData.append('subCategory', subCategory);
+      formData.append('position', position);
+    }
 
     try {
       const res = await uploadBookApi(formData);
@@ -189,8 +162,8 @@ const AdminBookUpload = () => {
         return;
       }
       const item = parsed[0];
-      if (!item.organization || !item.category || !item.question) {
-        setJsonError('Each question must contain at least "organization", "category", and "question" keys.');
+      if (!item.departmentName || !item.question) {
+        setJsonError('Each question must contain at least "departmentName" and "question" keys.');
         setJsonIsValid(false);
         return;
       }
@@ -433,7 +406,7 @@ const AdminBookUpload = () => {
 
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-gray-450 uppercase tracking-wider">
-                  Organization
+                  Department
                 </label>
                 <select
                   value={orgId}
@@ -442,47 +415,55 @@ const AdminBookUpload = () => {
                   disabled={loading}
                   required
                 >
-                  <option value="">Select Organization</option>
+                  <option value="">Select Department</option>
                   {organizations.map((org) => (
                     <option key={org._id} value={org._id}>{org.name}</option>
                   ))}
                 </select>
               </div>
 
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-gray-455 uppercase tracking-wider">
-                  Category
-                </label>
-                <select
-                  value={catId}
-                  onChange={(e) => setCatId(e.target.value)}
-                  className="glass-input rounded-xl py-2.5 px-4 text-sm text-white focus:outline-none cursor-pointer"
-                  disabled={!orgId || loading}
-                  required
-                >
-                  <option value="">Select Category</option>
-                  {categories.map((cat) => (
-                    <option key={cat._id} value={cat._id}>{cat.name}</option>
-                  ))}
-                </select>
-              </div>
+              {selectedDeptObj?.hasSubCategories && (
+                <>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-semibold text-gray-455 uppercase tracking-wider">
+                      Sub Category
+                    </label>
+                    <select
+                      value={subCategory}
+                      onChange={(e) => setSubCategory(e.target.value)}
+                      className="glass-input rounded-xl py-2.5 px-4 text-sm text-white focus:outline-none cursor-pointer"
+                      disabled={loading}
+                      required
+                    >
+                      <option value="">Select Sub Category</option>
+                      {['Officer', 'Soldier'].map((sub) => (
+                        <option key={sub} value={sub}>{sub}</option>
+                      ))}
+                    </select>
+                  </div>
 
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-gray-455 uppercase tracking-wider">
-                  Position (Optional)
-                </label>
-                <select
-                  value={posId}
-                  onChange={(e) => setPosId(e.target.value)}
-                  className="glass-input rounded-xl py-2.5 px-4 text-sm text-white focus:outline-none cursor-pointer"
-                  disabled={!catId || loading}
-                >
-                  <option value="">All Positions</option>
-                  {positions.map((pos) => (
-                    <option key={pos._id} value={pos._id}>{pos.name}</option>
-                  ))}
-                </select>
-              </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-semibold text-gray-455 uppercase tracking-wider">
+                      Position / Post
+                    </label>
+                    <select
+                      value={position}
+                      onChange={(e) => setPosition(e.target.value)}
+                      className="glass-input rounded-xl py-2.5 px-4 text-sm text-white focus:outline-none cursor-pointer"
+                      disabled={loading}
+                      required
+                    >
+                      <option value="">Select Position</option>
+                      {(subCategory === 'Officer'
+                        ? ['PMA Long Course', 'Lady Cadet Course (LCC)', 'Technical Cadet Course (TCC)', 'Short Service Commission']
+                        : ['General Duty Soldier', 'Clerk', 'Driver', 'Military Police', 'Technical Trade']
+                      ).map((pos) => (
+                        <option key={pos} value={pos}>{pos}</option>
+                      ))}
+                    </select>
+                  </div>
+                </>
+              )}
 
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-gray-455 uppercase tracking-wider">
@@ -502,7 +483,7 @@ const AdminBookUpload = () => {
 
               <button
                 type="submit"
-                disabled={loading || !file || !orgId || !catId}
+                disabled={loading || !file || !orgId || (selectedDeptObj?.hasSubCategories && (!subCategory || !position))}
                 className="w-full bg-red-600 hover:bg-red-500 active:bg-red-700 text-white font-bold py-3 px-4 rounded-xl text-sm transition-all shadow-lg hover:shadow-red-500/20 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed mt-6 font-display"
               >
                 {loading ? (

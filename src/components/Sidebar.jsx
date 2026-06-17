@@ -1,10 +1,11 @@
 import { Link, useLocation } from 'react-router-dom';
+import { useSelection } from '../context/SelectionContext';
 import {
   LayoutDashboard,
+  Building2,
   MessageSquareText,
   Activity,
   HeartPulse,
-  Award,
   User,
   Shield,
   ChevronRight,
@@ -12,6 +13,7 @@ import {
 
 const Sidebar = ({ onClose }) => {
   const location = useLocation();
+  const { selectedDepartment } = useSelection();
 
   const navItems = [
     {
@@ -20,31 +22,46 @@ const Sidebar = ({ onClose }) => {
       icon: LayoutDashboard,
     },
     {
-      name: 'Interview Practice',
-      path: '/interviews',
-      icon: MessageSquareText,
-    },
-    {
-      name: 'Physical Preparation',
-      path: '/progress/physical',
-      icon: Activity,
-    },
-    {
-      name: 'Medical Checklist',
-      path: '/progress/medical',
-      icon: HeartPulse,
-    },
-    {
-      name: 'Progress',
-      path: '/progress/readiness',
-      icon: Award,
-    },
-    {
-      name: 'Profile',
-      path: '/profile',
-      icon: User,
+      name: 'Departments',
+      path: '/departments',
+      icon: Building2,
     },
   ];
+
+  // If a department is selected, dynamically add links for the department's prep content
+  if (selectedDepartment?.slug) {
+    const slug = selectedDepartment.slug;
+    navItems.push(
+      {
+        name: `${selectedDepartment.name} Hub`,
+        path: `/department/${slug}`,
+        icon: Shield,
+        exact: true,
+      },
+      {
+        name: 'Interview Practice',
+        path: `/department/${slug}/interview`,
+        icon: MessageSquareText,
+      },
+      {
+        name: 'Physical Preparation',
+        path: `/department/${slug}/physical`,
+        icon: Activity,
+      },
+      {
+        name: 'Medical Checklist',
+        path: `/department/${slug}/medical`,
+        icon: HeartPulse,
+      }
+    );
+  }
+
+  // Always append Profile
+  navItems.push({
+    name: 'Profile',
+    path: '/profile',
+    icon: User,
+  });
 
   return (
     <div className="flex flex-col h-full">
@@ -62,7 +79,9 @@ const Sidebar = ({ onClose }) => {
       <nav className="flex-1 space-y-1">
         {navItems.map((item) => {
           const Icon = item.icon;
-          const isActive = location.pathname === item.path || (item.path !== '/dashboard' && location.pathname.startsWith(item.path));
+          const isActive = item.exact
+            ? location.pathname === item.path
+            : location.pathname === item.path || (item.path !== '/dashboard' && item.path !== '/departments' && location.pathname.startsWith(item.path));
           return (
             <Link
               key={item.path}

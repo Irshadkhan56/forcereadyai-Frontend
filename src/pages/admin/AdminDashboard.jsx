@@ -73,8 +73,8 @@ const AdminDashboard = () => {
       color: 'from-red-500/10 to-red-500/5 text-red-400 border-red-500/20'
     },
     {
-      title: 'Organizations',
-      value: stats?.organizations || 0,
+      title: 'Departments',
+      value: stats?.departments || 0,
       icon: Building2,
       color: 'from-purple-500/10 to-purple-500/5 text-purple-400 border-purple-500/20'
     },
@@ -226,8 +226,8 @@ const AdminDashboard = () => {
                         <div className="text-xs text-gray-500">{session.user?.email || 'N/A'}</div>
                       </td>
                       <td className="py-3.5 px-1">
-                        <div className="font-medium text-gray-300">{session.position?.name || 'General Practice'}</div>
-                        <div className="text-xs text-gray-500">{session.organization?.name}</div>
+                        <div className="font-medium text-gray-300">{session.departmentId?.name || 'General Practice'}</div>
+                        <div className="text-xs text-gray-500">{session.position ? `${session.subCategory} - ${session.position}` : ''}</div>
                       </td>
                       <td className="py-3.5 px-1 text-right text-gray-400">
                         {new Date(session.createdAt).toLocaleDateString()}

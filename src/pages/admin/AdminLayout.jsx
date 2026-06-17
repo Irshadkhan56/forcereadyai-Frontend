@@ -51,9 +51,7 @@ const AdminLayout = () => {
   const menuItems = [
     { name: 'Dashboard', path: '/admin', icon: LayoutDashboard },
     { name: 'Candidates', path: '/admin/users', icon: Users },
-    { name: 'Organizations', path: '/admin/organizations', icon: Building2 },
-    { name: 'Categories', path: '/admin/categories', icon: FolderTree },
-    { name: 'Positions', path: '/admin/positions', icon: Briefcase },
+    { name: 'Departments', path: '/admin/departments', icon: Building2 },
     { name: 'Question Bank', path: '/admin/questions', icon: HelpCircle },
     { name: 'Import Questions', path: '/admin/upload-book', icon: UploadCloud },
     { name: 'Analytics', path: '/admin/analytics', icon: BarChart3 },

@@ -10,24 +10,23 @@ export const blockUserApi = (id) => api.patch(`/admin/users/block/${id}`).then(r
 export const unblockUserApi = (id) => api.patch(`/admin/users/unblock/${id}`).then(r => r.data);
 export const deleteUserApi = (id) => api.delete(`/admin/users/${id}`).then(r => r.data);
 
-// ─── Organizations ──────────────────────────────────────────────────────────
-export const getOrgsApi = () => api.get('/organizations').then(r => r.data);
-export const createOrgApi = (data) => api.post('/admin/organizations', data).then(r => r.data);
-export const updateOrgApi = (id, data) => api.put(`/admin/organizations/${id}`, data).then(r => r.data);
-export const deleteOrgApi = (id) => api.delete(`/admin/organizations/${id}`).then(r => r.data);
+// ─── Departments ───────────────────────────────────────────────────────────
+export const getOrgsApi = () => api.get('/departments').then(r => r.data); // Keep alias getOrgsApi for easier migration, or rename to getDeptsApi
+export const getDeptsApi = () => api.get('/departments').then(r => r.data);
+export const createDeptApi = (data) => api.post('/admin/departments', data).then(r => r.data);
+export const updateDeptApi = (id, data) => api.put(`/admin/departments/${id}`, data).then(r => r.data);
+export const deleteDeptApi = (id) => api.delete(`/admin/departments/${id}`).then(r => r.data);
 
-// ─── Categories ──────────────────────────────────────────────────────────────
-export const getCategoriesApi = (orgId) => api.get(`/categories/${orgId}`).then(r => r.data);
-export const createCategoryApi = (data) => api.post('/admin/categories', data).then(r => r.data);
-export const updateCategoryApi = (id, data) => api.put(`/admin/categories/${id}`, data).then(r => r.data);
-export const deleteCategoryApi = (id) => api.delete(`/admin/categories/${id}`).then(r => r.data);
+// ─── Medical & Physical Templates ───────────────────────────────────────────
+export const getMedicalTemplateApi = (deptId, subCategory = '', position = '') =>
+  api.get('/admin/medical-tests/template', { params: { departmentId: deptId, subCategory, position } }).then(r => r.data);
+export const saveMedicalTemplateApi = (data) =>
+  api.put('/admin/medical-tests/template', data).then(r => r.data);
 
-// ─── Positions ───────────────────────────────────────────────────────────────
-export const getPositionsApi = (catId, orgId) =>
-  api.get(`/positions/category/${catId}`, { params: { orgId } }).then(r => r.data);
-export const createPositionApi = (data) => api.post('/admin/positions', data).then(r => r.data);
-export const updatePositionApi = (id, data) => api.put(`/admin/positions/${id}`, data).then(r => r.data);
-export const deletePositionApi = (id) => api.delete(`/admin/positions/${id}`).then(r => r.data);
+export const getPhysicalTemplateApi = (deptId, subCategory = '', position = '') =>
+  api.get('/admin/physical-tests/template', { params: { departmentId: deptId, subCategory, position } }).then(r => r.data);
+export const savePhysicalTemplateApi = (data) =>
+  api.put('/admin/physical-tests/template', data).then(r => r.data);
 
 // ─── Question Bank ────────────────────────────────────────────────────────────
 export const getQuestionsApi = (params) => api.get('/admin/questions', { params }).then(r => r.data);

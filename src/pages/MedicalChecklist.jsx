@@ -21,7 +21,7 @@ import {
 
 const MedicalChecklist = () => {
   const queryClient = useQueryClient();
-  const { selectedPosition } = useSelection();
+  const { selectedDepartment, selectedSubCategory, selectedPosition } = useSelection();
 
   // Keep track of which criteria ID is being edited inline
   const [editingId, setEditingId] = useState(null);
@@ -30,19 +30,25 @@ const MedicalChecklist = () => {
 
   // 1. Fetch User Medical Checklist Progress
   const { data: progressData, isLoading, error } = useQuery({
-    queryKey: ['medicalProgress', selectedPosition?._id],
+    queryKey: ['medicalProgress', selectedDepartment?._id, selectedSubCategory, selectedPosition],
     queryFn: async () => {
-      const res = await api.get(`/progress/medical?positionId=${selectedPosition._id}`);
+      const res = await api.get(`/medical-tests/progress`, {
+        params: {
+          departmentId: selectedDepartment._id,
+          subCategory: selectedSubCategory,
+          position: selectedPosition,
+        },
+      });
       return res.data.data;
     },
-    enabled: !!selectedPosition?._id,
+    enabled: !!selectedDepartment?._id,
   });
 
   // 2. Update Progress Mutation
   const updateProgressMutation = useMutation({
     mutationFn: async ({ criteriaId, status, notes }) => {
-      const res = await api.put('/progress/medical', {
-        positionId: selectedPosition._id,
+      const res = await api.put('/medical-tests/progress', {
+        departmentId: selectedDepartment._id,
         criteriaId,
         status,
         notes,
@@ -50,7 +56,7 @@ const MedicalChecklist = () => {
       return res.data.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['medicalProgress', selectedPosition?._id]);
+      queryClient.invalidateQueries({ queryKey: ['medicalProgress', selectedDepartment?._id, selectedSubCategory, selectedPosition] });
       setEditingId(null);
     },
     onError: (err) => {
@@ -82,17 +88,17 @@ const MedicalChecklist = () => {
   };
 
   // Guard: No selection
-  if (!selectedPosition) {
+  if (!selectedDepartment || (selectedDepartment.hasSubCategories && (!selectedSubCategory || !selectedPosition))) {
     return (
       <div className="glass-panel p-10 rounded-2xl text-center space-y-5 max-w-lg mx-auto">
         <Lock className="w-12 h-12 text-primary-500 mx-auto" />
-        <h2 className="text-xl font-bold text-white">Target Position Required</h2>
+        <h2 className="text-xl font-bold text-white">Target Selection Required</h2>
         <p className="text-gray-400 text-xs leading-relaxed">
-          You must set your active target force position before pre-validating medical standards.
+          You must set your active target force department and entry/post before pre-validating medical standards.
         </p>
         <div className="pt-2">
           <Link
-            to="/organizations"
+            to="/departments"
             className="inline-flex items-center gap-1.5 px-6 py-3.5 bg-primary-600 hover:bg-primary-500 text-white font-bold rounded-xl text-xs transition-all shadow-md"
           >
             Open Selection Wizard <ChevronRight className="w-4 h-4" />
@@ -138,7 +144,7 @@ const MedicalChecklist = () => {
             <HeartPulse className="w-4 h-4" /> Medical Pre-Validation
           </div>
           <h1 className="text-2xl font-extrabold text-white">
-            Medical Standards: <span className="text-rose-500">{progressData.position?.name}</span>
+            Medical Standards: <span className="text-rose-500">{selectedDepartment?.name}{selectedPosition ? ` - ${selectedPosition}` : ''}</span>
           </h1>
           <p className="text-gray-400 text-sm max-w-xl">
             Pre-validate your physical dimensions, height requirements, and visual health guidelines before the official service board clinical exams.

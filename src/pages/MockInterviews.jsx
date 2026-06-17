@@ -5,13 +5,10 @@ import { useSelection } from '../context/SelectionContext';
 import api from '../services/api';
 import {
   MessageSquare,
-  Award,
-  Play,
   History,
   Timer as TimerIcon,
   CheckCircle,
   HelpCircle,
-  AlertCircle,
   ArrowRight,
   Loader2,
   Trash2,
@@ -23,7 +20,7 @@ import {
 const MockInterviews = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { selectedOrg, selectedCategory, selectedPosition, clearSelection } = useSelection();
+  const { selectedDepartment, selectedSubCategory, selectedPosition, clearSelection } = useSelection();
 
   // Session state: 'idle', 'loading', 'active', 'evaluation', 'finished'
   const [sessionState, setSessionState] = useState('idle');
@@ -50,9 +47,9 @@ const MockInterviews = () => {
   const startSessionMutation = useMutation({
     mutationFn: async ({ isVoice = false }) => {
       const res = await api.post('/interviews/sessions', {
-        organizationId: selectedOrg._id,
-        categoryId: selectedCategory._id,
-        positionId: selectedPosition._id,
+        departmentId: selectedDepartment._id,
+        subCategory: selectedSubCategory,
+        position: selectedPosition,
         count: 20,
         isVoice,
       });
@@ -74,7 +71,7 @@ const MockInterviews = () => {
       console.error('Failed to start session:', err);
       const msg = err.response?.data?.message || '';
       if (msg.includes('not found') || err.response?.status === 404) {
-        alert(`${msg || 'Selected configuration not found'}. Please re-select your target position.`);
+        alert(`${msg || 'Selected configuration not found'}. Please re-select your target department.`);
         clearSelection();
       } else {
         alert(msg || 'Failed to start interview session. Rate limits may apply.');
@@ -95,7 +92,6 @@ const MockInterviews = () => {
     onSuccess: (data) => {
       setFeedback(data.evaluation);
       setSessionState('evaluation');
-      // If this completed the session on the backend
       if (data.sessionStatus === 'completed') {
         stopTimer();
       }
@@ -142,7 +138,6 @@ const MockInterviews = () => {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // Actions
   const handleStartInterview = (isVoice = false) => {
     setSessionState('loading');
     startSessionMutation.mutate({ isVoice });
@@ -173,23 +168,21 @@ const MockInterviews = () => {
     }
   };
 
-  // RENDER BLOCKS
-
-  // Guard: If no target position is chosen
-  if (!selectedOrg || !selectedCategory || !selectedPosition) {
+  // Guard: If no target department is chosen
+  if (!selectedDepartment) {
     return (
       <div className="glass-panel p-10 rounded-2xl text-center space-y-5 max-w-lg mx-auto">
         <Lock className="w-12 h-12 text-primary-500 mx-auto" />
-        <h2 className="text-xl font-bold text-white">Target Position Required</h2>
+        <h2 className="text-xl font-bold text-white">Target Department Required</h2>
         <p className="text-gray-400 text-xs leading-relaxed">
-          You must set your active target force organization, category, and rank position before simulating interviews.
+          You must select your active target department before simulating mock board interviews.
         </p>
         <div className="pt-2">
           <Link
-            to="/organizations"
+            to="/departments"
             className="inline-flex items-center gap-1.5 px-6 py-3.5 bg-primary-600 hover:bg-primary-500 text-white font-bold rounded-xl text-xs transition-all shadow-md"
           >
-            Open Selection Wizard <ArrowRight className="w-4 h-4" />
+            Select Department <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </div>
@@ -203,24 +196,21 @@ const MockInterviews = () => {
         <div className="space-y-2">
           <h2 className="text-xl font-bold text-white">Loading Interview Questions</h2>
           <p className="text-gray-400 text-xs max-w-sm mx-auto leading-relaxed">
-            Fetching standard exam and mock questions from the database for <span className="text-white font-semibold">{selectedPosition.name}</span> at <span className="text-white font-semibold">{selectedOrg.name}</span>.
+            Fetching exam prep questions from the database for <span className="text-white font-semibold">{selectedPosition || selectedDepartment.name}</span>.
           </p>
         </div>
       </div>
     );
   }
 
-  // State: Active Simulation (Typing Answer) or Evaluation (AI Feedback Display)
   if (sessionState === 'active' || sessionState === 'evaluation') {
     const currentQuestion = currentSession.questions[currentQuestionIdx];
     const isSubmitting = submitAnswerMutation.isPending;
 
     return (
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-        {/* LEFT/TOP: Question & Focus Area */}
         <div className="lg:col-span-2 space-y-6">
           <div className="glass-panel p-8 rounded-2xl space-y-6">
-            {/* Header info */}
             <div className="flex items-center justify-between border-b border-gray-800/80 pb-4">
               <div className="flex items-center gap-2 text-xs font-bold text-gray-400">
                 <span className="px-2 py-0.5 bg-primary-600/20 text-primary-400 rounded-md">
@@ -235,13 +225,11 @@ const MockInterviews = () => {
               </div>
             </div>
 
-            {/* Question Text */}
             <div className="py-2">
               <span className="text-xs text-gray-500 font-semibold uppercase tracking-wider block mb-2">Simulation Question</span>
               <p className="text-xl font-bold text-white leading-relaxed">{currentQuestion.question}</p>
             </div>
 
-            {/* Input field or Disabled text */}
             {sessionState === 'active' ? (
               <form onSubmit={handleSubmitAnswer} className="space-y-4">
                 <div>
@@ -286,11 +274,9 @@ const MockInterviews = () => {
           </div>
         </div>
 
-        {/* RIGHT: AI Feedback Panel */}
         <div className="space-y-6">
           {sessionState === 'evaluation' && feedback && (
             <div className="glass-panel p-6 rounded-2xl border border-gray-800 space-y-6 animate-fadeIn">
-              {/* Score Header */}
               <div className="flex items-center justify-between border-b border-gray-800 pb-3">
                 <h3 className="font-bold text-white text-sm">Gemini AI Feedback</h3>
                 <div className="flex items-center gap-1">
@@ -299,25 +285,21 @@ const MockInterviews = () => {
                 </div>
               </div>
 
-              {/* Strengths */}
               <div className="space-y-1.5">
                 <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Strengths</span>
                 <p className="text-xs text-gray-300 leading-relaxed">{feedback.strengths}</p>
               </div>
 
-              {/* Weaknesses */}
               <div className="space-y-1.5">
                 <span className="text-[10px] text-red-400 font-bold uppercase tracking-wider">Weaknesses</span>
                 <p className="text-xs text-gray-300 leading-relaxed">{feedback.weaknesses}</p>
               </div>
 
-              {/* Suggestions */}
               <div className="space-y-1.5">
                 <span className="text-[10px] text-amber-400 font-bold uppercase tracking-wider">Suggestions</span>
                 <p className="text-xs text-gray-300 leading-relaxed">{feedback.suggestions}</p>
               </div>
 
-              {/* Next Controls */}
               <button
                 onClick={handleNextQuestion}
                 className="w-full bg-primary-600 hover:bg-primary-500 text-white font-bold py-3 px-4 rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
@@ -339,7 +321,6 @@ const MockInterviews = () => {
     );
   }
 
-  // State: Finished Screen
   if (sessionState === 'finished') {
     return (
       <div className="glass-panel p-8 rounded-2xl text-center space-y-6 max-w-md mx-auto">
@@ -361,30 +342,28 @@ const MockInterviews = () => {
             View History
           </button>
           <Link
-            to="/progress/readiness"
+            to={`/department/${selectedDepartment.slug}`}
             className="flex-1 bg-primary-600 hover:bg-primary-500 text-white font-bold py-3 px-4 rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-1.5"
           >
-            Check Readiness
+            Go to Hub
           </Link>
         </div>
       </div>
     );
   }
 
-  // State: Idle (Start session option or history overview)
   return (
     <div className="space-y-8">
-      {/* Simulation Info Card */}
       <div className="glass-panel p-8 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div className="space-y-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-purple-600/15 border border-purple-500/20 rounded-full text-xs font-semibold text-purple-400">
             <MessageSquare className="w-4 h-4" /> Real-time Simulation
           </div>
           <h1 className="text-2xl font-extrabold text-white">
-            Active Target: <span className="text-primary-500">{selectedPosition.name}</span>
+            Active Target: <span className="text-primary-500">{selectedPosition || selectedDepartment.name}</span>
           </h1>
           <p className="text-gray-400 text-sm max-w-xl">
-            Simulate a realistic 20-question interview board based on military cadet and administrative officer entries. Get scored instantly out of 100 on content, terminology, and logical reasoning.
+            Simulate a realistic 20-question interview board. Get scored instantly out of 100 on content, terminology, and logical reasoning.
           </p>
         </div>
 
@@ -398,14 +377,13 @@ const MockInterviews = () => {
           
           <button
             onClick={() => handleStartInterview(true)}
-            className="flex items-center gap-1.5 px-6 py-3 bg-primary-600 hover:bg-primary-500 active:bg-primary-700 text-white text-xs font-bold rounded-xl transition-all shadow-lg hover:shadow-primary-500/20 cursor-pointer animate-pulse-subtle"
+            className="flex items-center gap-1.5 px-6 py-3 bg-primary-600 hover:bg-primary-500 active:bg-primary-700 text-white text-xs font-bold rounded-xl transition-all shadow-lg hover:shadow-primary-500/20 cursor-pointer"
           >
             <Mic className="w-4 h-4 fill-current" /> Start Voice Board Mode
           </button>
         </div>
       </div>
 
-      {/* Historical Sessions List */}
       <div className="space-y-4">
         <div>
           <h2 className="text-lg font-bold text-white flex items-center gap-2">
@@ -423,7 +401,7 @@ const MockInterviews = () => {
             <HelpCircle className="w-12 h-12 text-gray-700 mx-auto" />
             <h4 className="font-bold text-white">No Sessions Found</h4>
             <p className="text-gray-500 text-xs max-w-sm mx-auto leading-relaxed">
-              You haven't completed any mock interview simulation sessions yet. Click "Start New Simulation" to begin.
+              You haven't completed any mock interview simulation sessions yet.
             </p>
           </div>
         ) : (
@@ -441,11 +419,13 @@ const MockInterviews = () => {
                 <div className="space-y-3">
                   <div className="flex items-center gap-2 text-xs">
                     <span className="px-2 py-0.5 bg-gray-900 border border-gray-800 text-gray-400 rounded-md font-medium">
-                      {sess.organization?.name}
+                      {sess.departmentId?.name}
                     </span>
-                    <span className="px-2 py-0.5 bg-primary-600/15 text-primary-400 rounded-md font-medium">
-                      {sess.position?.name}
-                    </span>
+                    {sess.position && (
+                      <span className="px-2 py-0.5 bg-primary-600/15 text-primary-400 rounded-md font-medium">
+                        {sess.position}
+                      </span>
+                    )}
                   </div>
 
                   <h3 className="font-bold text-sm text-white">{sess.questions.length} Simulation Questions</h3>

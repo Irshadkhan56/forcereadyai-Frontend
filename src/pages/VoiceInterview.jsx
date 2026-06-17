@@ -10,11 +10,7 @@ import {
   CheckCircle,
   AlertCircle,
   ChevronRight,
-  ArrowLeft,
   X,
-  Award,
-  BookOpen,
-  HelpCircle,
   Loader2
 } from 'lucide-react';
 
@@ -35,7 +31,6 @@ const VoiceInterview = () => {
   // Keyboard accessibility triggers
   useEffect(() => {
     const handleKeyPress = (e) => {
-      // Replay question on Ctrl + R
       if (e.ctrlKey && e.key === 'r') {
         e.preventDefault();
         const replayBtn = document.querySelector('[title="Replay Question"]');
@@ -142,11 +137,11 @@ const VoiceInterview = () => {
         <div className="space-y-2 max-w-md">
           <h2 className="text-xl font-bold text-white">Failed to Load Interview Room</h2>
           <p className="text-gray-400 text-sm">
-            {error?.response?.data?.message || 'The interview session details could not be retrieved. It may have expired or been deleted.'}
+            {error?.response?.data?.message || 'The interview session details could not be retrieved.'}
           </p>
         </div>
-        <Link to="/interviews" className="px-5 py-2.5 bg-gray-900 border border-gray-800 text-white rounded-xl text-xs font-bold hover:bg-gray-850">
-          Go Back to Simulator
+        <Link to="/dashboard" className="px-5 py-2.5 bg-gray-900 border border-gray-800 text-white rounded-xl text-xs font-bold hover:bg-gray-850">
+          Go Back to Dashboard
         </Link>
       </div>
     );
@@ -172,13 +167,13 @@ const VoiceInterview = () => {
 
           <div className="flex gap-4 pt-2">
             <button
-              onClick={() => navigate('/interviews')}
+              onClick={() => navigate(`/department/${sessionData.departmentId?.slug}/interview`)}
               className="flex-1 border border-gray-800 hover:border-gray-750 bg-gray-900/40 text-white font-bold py-3 px-4 rounded-xl text-xs transition-all cursor-pointer"
             >
               Exit Interview
             </button>
             <Link
-              to="/progress/readiness"
+              to={`/department/${sessionData.departmentId?.slug}`}
               className="flex-1 bg-primary-600 hover:bg-primary-500 text-white font-bold py-3 px-4 rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-1.5"
             >
               Readiness Hub
@@ -200,7 +195,7 @@ const VoiceInterview = () => {
           <div>
             <h1 className="text-sm font-bold text-white">ForceReady Mock Board</h1>
             <p className="text-[10px] text-gray-500 font-semibold uppercase tracking-wider">
-              {sessionData.organization?.name || 'Active Service'} • {sessionData.position?.name || 'Candidate Entry'}
+              {sessionData.departmentId?.name || 'Active Service'} {sessionData.position ? `• ${sessionData.position}` : ''}
             </p>
           </div>
         </div>
@@ -215,7 +210,7 @@ const VoiceInterview = () => {
           <button
             onClick={() => {
               if (confirm('Are you sure you want to exit the interview room? Progress for unanswered questions will not be saved.')) {
-                navigate('/interviews');
+                navigate(`/department/${sessionData.departmentId?.slug}/interview`);
               }
             }}
             className="p-2 text-gray-500 hover:text-white hover:bg-gray-900 rounded-lg transition-all cursor-pointer"
@@ -239,7 +234,6 @@ const VoiceInterview = () => {
         {/* Left Side: Simulation Card */}
         <div className="lg:col-span-8 space-y-6">
           <div className="glass-panel p-6 md:p-8 rounded-2xl border border-gray-850 space-y-6">
-            {/* Question Tags & Index */}
             <div className="flex items-center justify-between">
               <span className="px-2.5 py-0.5 bg-primary-600/10 text-primary-400 border border-primary-500/10 text-xs font-bold rounded-md uppercase tracking-wider">
                 Question {currentQuestionIdx + 1} of {totalQuestions}
@@ -249,7 +243,6 @@ const VoiceInterview = () => {
               </span>
             </div>
 
-            {/* Question Text */}
             <div className="space-y-3">
               <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider block">Question Prompt</span>
               <p className="text-lg md:text-xl font-bold text-white leading-relaxed">
@@ -257,13 +250,11 @@ const VoiceInterview = () => {
               </p>
             </div>
 
-            {/* Question Reader Playback Controls */}
             <div className="border-t border-b border-gray-900/60 py-3.5 flex items-center justify-between">
               <span className="text-[10px] text-gray-400 font-semibold tracking-wide">Audio Prompter:</span>
               <QuestionSpeaker text={currentQuestion.question} autoPlay={true} />
             </div>
 
-            {/* Answer Board input: voice capture / text edit */}
             {sessionState === 'active' ? (
               <form onSubmit={handleSubmit} className="space-y-6">
                 <VoiceRecorder
@@ -305,7 +296,6 @@ const VoiceInterview = () => {
         <div className="lg:col-span-4 space-y-6 h-full">
           {sessionState === 'evaluation' && feedback ? (
             <div className="glass-panel p-6 rounded-2xl border border-gray-800 space-y-6 animate-fadeIn relative">
-              {/* Top Score Ring */}
               <div className="flex items-center justify-between border-b border-gray-900/60 pb-4">
                 <div>
                   <h3 className="font-extrabold text-white text-xs uppercase tracking-wider">Board Assessment</h3>
@@ -317,7 +307,6 @@ const VoiceInterview = () => {
                 </div>
               </div>
 
-              {/* Strengths */}
               <div className="space-y-1.5">
                 <div className="flex items-center gap-1.5 text-[10px] text-emerald-400 font-bold uppercase tracking-wider">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
@@ -328,7 +317,6 @@ const VoiceInterview = () => {
                 </p>
               </div>
 
-              {/* Weaknesses */}
               <div className="space-y-1.5">
                 <div className="flex items-center gap-1.5 text-[10px] text-red-400 font-bold uppercase tracking-wider">
                   <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
@@ -339,7 +327,6 @@ const VoiceInterview = () => {
                 </p>
               </div>
 
-              {/* Suggestions */}
               <div className="space-y-1.5">
                 <div className="flex items-center gap-1.5 text-[10px] text-amber-400 font-bold uppercase tracking-wider">
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
@@ -350,7 +337,6 @@ const VoiceInterview = () => {
                 </p>
               </div>
 
-              {/* Action Button */}
               <button
                 onClick={handleNextQuestion}
                 className="w-full bg-primary-600 hover:bg-primary-500 text-white font-bold py-3.5 px-4 rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer mt-4"
