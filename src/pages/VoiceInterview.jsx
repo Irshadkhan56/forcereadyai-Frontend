@@ -11,7 +11,8 @@ import {
   AlertCircle,
   ChevronRight,
   X,
-  Loader2
+  Loader2,
+  HelpCircle
 } from 'lucide-react';
 
 const VoiceInterview = () => {
