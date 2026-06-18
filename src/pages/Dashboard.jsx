@@ -111,14 +111,14 @@ const Dashboard = () => {
       {/* 1. TOP WELCOME HERO */}
       <div className="glass-panel p-8 rounded-2xl relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div className="absolute right-0 bottom-0 top-0 w-1/3 bg-radial-gradient from-primary-600/10 to-transparent pointer-events-none" />
-        <div className="space-y-2 relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary-600/10 border border-primary-500/15 rounded-full text-xs font-semibold text-primary-400">
+        <div className="space-y-2.5 relative z-10">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-primary-600/10 border border-primary-500/15 rounded-full text-sm font-semibold text-primary-400">
             <TrendingUp className="w-3.5 h-3.5" /> Candidate Readiness Dashboard
           </div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-white">
+          <h1 className="text-4xl font-extrabold tracking-tight text-white">
             Welcome, <span className="text-primary-500">{user?.name}</span>!
           </h1>
-          <p className="text-gray-400 text-sm max-w-xl">
+          <p className="text-gray-400 text-base max-w-xl">
             {selectedDepartment
               ? `Your target track is set to ${selectedDepartment.name}${selectedPosition ? ` (${selectedPosition})` : ''}.`
               : 'Set your target force department to calculate readiness.'}
@@ -142,17 +142,17 @@ const Dashboard = () => {
             {/* Interview score card */}
             <div className="glass-panel p-6 rounded-2xl border border-gray-850 space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Interview Readiness</span>
+                <span className="text-base font-bold text-gray-400 uppercase tracking-wider">Interview Readiness</span>
                 <MessageSquareText className="w-5 h-5 text-purple-400" />
               </div>
               <div className="flex items-baseline gap-1.5">
-                <span className="text-3xl font-black text-white">{progress.interviewReadiness}%</span>
+                <span className="text-4xl font-black text-white">{progress.interviewReadiness}%</span>
                 <span className="text-sm text-gray-400">avg mock</span>
               </div>
               <div className="w-full h-1.5 bg-gray-900 rounded-full overflow-hidden">
                 <div className="h-full bg-purple-500 rounded-full" style={{ width: `${progress.interviewReadiness}%` }} />
               </div>
-              <div className="text-xs text-gray-400 flex justify-between">
+              <div className="text-sm text-gray-400 flex justify-between">
                 <span>Completed: {details.interviews.totalCompleted} sessions</span>
                 <Link to={`/department/${selectedDepartment.slug}/interview`} className="text-purple-400 hover:text-purple-300 font-bold flex items-center">
                   Practice <ChevronRight className="w-3.5 h-3.5" />
@@ -163,17 +163,17 @@ const Dashboard = () => {
             {/* Physical score card */}
             <div className="glass-panel p-6 rounded-2xl border border-gray-850 space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Physical Preparation</span>
+                <span className="text-base font-bold text-gray-400 uppercase tracking-wider">Physical Preparation</span>
                 <Activity className="w-5 h-5 text-emerald-400" />
               </div>
               <div className="flex items-baseline gap-1.5">
-                <span className="text-3xl font-black text-white">{progress.physicalReadiness}%</span>
+                <span className="text-4xl font-black text-white">{progress.physicalReadiness}%</span>
                 <span className="text-sm text-gray-400">completed</span>
               </div>
               <div className="w-full h-1.5 bg-gray-900 rounded-full overflow-hidden">
                 <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${progress.physicalReadiness}%` }} />
               </div>
-              <div className="text-xs text-gray-400 flex justify-between">
+              <div className="text-sm text-gray-400 flex justify-between">
                 <span>Goals met: {details.physical.completedExercises} of {details.physical.totalExercises}</span>
                 <Link to={`/department/${selectedDepartment.slug}/physical`} className="text-emerald-400 hover:text-emerald-300 font-bold flex items-center">
                   Workouts <ChevronRight className="w-3.5 h-3.5" />
@@ -184,17 +184,17 @@ const Dashboard = () => {
             {/* Medical score card */}
             <div className="glass-panel p-6 rounded-2xl border border-gray-850 space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Medical Pre-checks</span>
+                <span className="text-base font-bold text-gray-400 uppercase tracking-wider">Medical Pre-checks</span>
                 <HeartPulse className="w-5 h-5 text-rose-400" />
               </div>
               <div className="flex items-baseline gap-1.5">
-                <span className="text-3xl font-black text-white">{progress.medicalReadiness}%</span>
+                <span className="text-4xl font-black text-white">{progress.medicalReadiness}%</span>
                 <span className="text-sm text-gray-400">passed</span>
               </div>
               <div className="w-full h-1.5 bg-gray-900 rounded-full overflow-hidden">
                 <div className="h-full bg-rose-500 rounded-full" style={{ width: `${progress.medicalReadiness}%` }} />
               </div>
-              <div className="text-xs text-gray-400 flex justify-between">
+              <div className="text-sm text-gray-400 flex justify-between">
                 <span>Verified: {details.medical.passedCriteria} of {details.medical.totalCriteria}</span>
                 <Link to={`/department/${selectedDepartment.slug}/medical`} className="text-rose-400 hover:text-rose-300 font-bold flex items-center">
                   Checklist <ChevronRight className="w-3.5 h-3.5" />
@@ -207,13 +207,13 @@ const Dashboard = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 glass-panel p-6 rounded-2xl border border-gray-850 space-y-6">
               <div>
-                <h3 className="font-bold text-white text-base">Weighted Preparation Performance</h3>
-                <p className="text-gray-400 text-sm mt-1">Calculated comparing individual index metrics</p>
+                <h3 className="font-bold text-white text-lg">Weighted Preparation Performance</h3>
+                <p className="text-gray-400 text-base mt-1">Calculated comparing individual index metrics</p>
               </div>
 
               <div className="space-y-5 py-4">
                 <div className="space-y-2">
-                  <div className="flex justify-between text-sm font-medium">
+                  <div className="flex justify-between text-base font-medium">
                     <span className="text-gray-300">Mock Board Interviews (40% weight)</span>
                     <span className="text-purple-400 font-bold">{progress.interviewReadiness}%</span>
                   </div>
@@ -226,7 +226,7 @@ const Dashboard = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <div className="flex justify-between text-sm font-medium">
+                  <div className="flex justify-between text-base font-medium">
                     <span className="text-gray-300">Physical Conditioning Tests (40% weight)</span>
                     <span className="text-emerald-400 font-bold">{progress.physicalReadiness}%</span>
                   </div>
@@ -239,7 +239,7 @@ const Dashboard = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <div className="flex justify-between text-sm font-medium">
+                  <div className="flex justify-between text-base font-medium">
                     <span className="text-gray-300">Medical Requirements Check (20% weight)</span>
                     <span className="text-rose-400 font-bold">{progress.medicalReadiness}%</span>
                   </div>
@@ -256,10 +256,10 @@ const Dashboard = () => {
             <div className="glass-panel p-6 rounded-2xl border border-gray-850 space-y-6 flex flex-col justify-between">
               <div className="space-y-5">
                 <div>
-                  <h3 className="font-bold text-white text-base flex items-center gap-1.5">
+                  <h3 className="font-bold text-white text-lg flex items-center gap-1.5">
                     <Clock className="w-4 h-4 text-gray-400" /> Recent Activity
                   </h3>
-                  <p className="text-gray-400 text-sm mt-1">Live training logs entries</p>
+                  <p className="text-gray-400 text-base mt-1">Live training logs entries</p>
                 </div>
 
                 <div className="space-y-4">
@@ -271,8 +271,8 @@ const Dashboard = () => {
                           <Icon className="w-4 h-4" />
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="text-sm font-semibold text-gray-200 leading-normal">{act.text}</p>
-                          <p className="text-xs text-gray-400 mt-1">{act.meta}</p>
+                          <p className="text-base font-semibold text-gray-200 leading-normal">{act.text}</p>
+                          <p className="text-sm text-gray-400 mt-1">{act.meta}</p>
                         </div>
                       </div>
                     );
@@ -282,7 +282,7 @@ const Dashboard = () => {
 
               <Link
                 to={`/department/${selectedDepartment.slug}`}
-                className="w-full bg-gray-900 border border-gray-800 hover:border-gray-750 text-gray-400 hover:text-white font-bold py-3 px-4 rounded-xl text-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-4"
+                className="w-full bg-gray-900 border border-gray-800 hover:border-gray-750 text-gray-400 hover:text-white font-bold py-3 px-4 rounded-xl text-base transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-4"
               >
                 Open Department Hub <ChevronRight className="w-4 h-4" />
               </Link>
@@ -294,8 +294,8 @@ const Dashboard = () => {
         <div className="glass-panel p-10 rounded-2xl border border-gray-850 text-center space-y-5 max-w-lg mx-auto py-16">
           <Award className="w-12 h-12 text-gray-700 mx-auto" />
           <div className="space-y-2">
-            <h2 className="text-xl font-bold text-white">Target Parameters Empty</h2>
-            <p className="text-gray-400 text-sm leading-relaxed max-w-xs mx-auto">
+            <h2 className="text-2xl font-bold text-white">Target Parameters Empty</h2>
+            <p className="text-gray-400 text-base leading-relaxed max-w-xs mx-auto">
               Please select your target force department to begin tracking your recruitment readiness index.
             </p>
           </div>

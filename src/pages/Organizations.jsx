@@ -107,15 +107,15 @@ const Organizations = () => {
     <div className="space-y-8 max-w-4xl mx-auto">
       {/* HEADER */}
       <div>
-        <h1 className="text-2xl font-extrabold text-white">Target Preparation Track</h1>
-        <p className="text-gray-400 text-xs mt-1">
+        <h1 className="text-3xl font-extrabold text-white">Target Preparation Track</h1>
+        <p className="text-gray-400 text-sm mt-1">
           Select your target force department to load customized psychological tests, workouts, and medical checklists.
         </p>
       </div>
 
       {/* STEP INDICATORS (Only visible when selecting Army track) */}
       {tempDept?.hasSubCategories && (
-        <div className="glass-panel p-4 rounded-xl flex items-center justify-between border border-gray-800/80">
+        <div className="glass-panel p-4 rounded-xl flex items-center justify-between border border-gray-880/80">
           <div className="flex items-center justify-between w-full max-w-2xl mx-auto">
             {[
               { num: 1, label: 'Department' },
@@ -126,7 +126,7 @@ const Organizations = () => {
               <div key={s.num} className="flex items-center">
                 <div className="flex items-center gap-2">
                   <div
-                    className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
+                    className={`w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
                       step === s.num
                         ? 'bg-primary-600 text-white ring-4 ring-primary-500/20'
                         : step > s.num
@@ -137,7 +137,7 @@ const Organizations = () => {
                     {s.num}
                   </div>
                   <span
-                    className={`text-xs font-semibold hidden sm:inline ${
+                    className={`text-sm font-semibold hidden sm:inline ${
                       step === s.num ? 'text-white font-bold' : 'text-gray-500'
                     }`}
                   >
@@ -162,8 +162,8 @@ const Organizations = () => {
                   <Building2 className="w-4 h-4" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-white">Select Force / Department</h2>
-                  <p className="text-gray-500 text-xs mt-0.5">Select your targeted service line</p>
+                  <h2 className="text-xl font-bold text-white">Select Force / Department</h2>
+                  <p className="text-gray-400 text-sm mt-0.5">Select your targeted service line</p>
                 </div>
               </div>
 
@@ -184,8 +184,8 @@ const Organizations = () => {
                         {dept.name.charAt(0)}
                       </div>
                       <div className="space-y-1 min-w-0 flex-1">
-                        <h4 className="text-xs font-bold text-white truncate">{dept.name}</h4>
-                        <p className="text-[10px] text-gray-500 leading-normal line-clamp-2">
+                        <h4 className="text-sm font-bold text-white truncate">{dept.name}</h4>
+                        <p className="text-xs text-gray-400 leading-normal line-clamp-2">
                           {dept.description}
                         </p>
                       </div>
@@ -204,8 +204,8 @@ const Organizations = () => {
                   <BookOpen className="w-4 h-4" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-white">Select Entry Level</h2>
-                  <p className="text-gray-500 text-xs mt-0.5">Select commissions or enlisted soldiers tracks</p>
+                  <h2 className="text-xl font-bold text-white">Select Entry Level</h2>
+                  <p className="text-gray-400 text-sm mt-0.5">Select commissions or enlisted soldiers tracks</p>
                 </div>
               </div>
 
@@ -222,8 +222,8 @@ const Organizations = () => {
                           : 'border-gray-850 hover:border-gray-800'
                       }`}
                     >
-                      <h4 className="text-sm font-bold text-white">{sub.name} Entry</h4>
-                      <p className="text-xs text-gray-400 leading-relaxed">{sub.description}</p>
+                      <h4 className="text-base font-bold text-white">{sub.name} Entry</h4>
+                      <p className="text-sm text-gray-400 leading-relaxed">{sub.description}</p>
                     </button>
                   );
                 })}
@@ -232,7 +232,7 @@ const Organizations = () => {
               <div className="flex justify-between pt-4 border-t border-gray-900/50">
                 <button
                   onClick={() => setStep(1)}
-                  className="px-5 py-3 border border-gray-800 hover:border-gray-750 text-gray-400 hover:text-white font-bold rounded-xl text-xs transition-all flex items-center gap-1.5 cursor-pointer"
+                  className="px-5 py-3 border border-gray-800 hover:border-gray-750 text-gray-400 hover:text-white font-bold rounded-xl text-sm transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <ArrowLeft className="w-4 h-4" /> Back
                 </button>
@@ -248,8 +248,8 @@ const Organizations = () => {
                   <Compass className="w-4 h-4" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-white">Select Specific Post</h2>
-                  <p className="text-gray-500 text-xs mt-0.5">Select targeted job post</p>
+                  <h2 className="text-xl font-bold text-white">Select Specific Post</h2>
+                  <p className="text-gray-400 text-sm mt-0.5">Select targeted job post</p>
                 </div>
               </div>
 
@@ -267,14 +267,14 @@ const Organizations = () => {
                             : 'border-gray-850 hover:border-gray-800 text-gray-400 hover:text-white'
                         }`}
                       >
-                        <span className="text-xs font-bold">{pos}</span>
+                        <span className="text-sm font-bold">{pos}</span>
                       </button>
                     );
                   })}
                 </div>
 
                 <div className="border-t border-gray-900/50 pt-4 max-w-md mx-auto space-y-2">
-                  <label className="block text-gray-500 text-[10px] font-bold uppercase tracking-wider">
+                  <label className="block text-gray-400 text-xs font-bold uppercase tracking-wider">
                     Or specify a custom post name:
                   </label>
                   <input
@@ -282,7 +282,7 @@ const Organizations = () => {
                     value={customPositionName}
                     onChange={(e) => handleCustomPosChange(e.target.value)}
                     placeholder="e.g. Signals Officer, Commando..."
-                    className="w-full bg-gray-950/40 text-xs text-white placeholder-gray-700 rounded-xl p-3 border border-gray-800 focus:border-primary-500/50 focus:outline-none"
+                    className="w-full bg-gray-950/40 text-sm text-white placeholder-gray-700 rounded-xl p-3 border border-gray-800 focus:border-primary-500/50 focus:outline-none"
                   />
                 </div>
               </div>
@@ -290,14 +290,14 @@ const Organizations = () => {
               <div className="flex justify-between pt-4 border-t border-gray-900/50">
                 <button
                   onClick={() => setStep(2)}
-                  className="px-5 py-3 border border-gray-800 hover:border-gray-750 text-gray-400 hover:text-white font-bold rounded-xl text-xs transition-all flex items-center gap-1.5 cursor-pointer"
+                  className="px-5 py-3 border border-gray-800 hover:border-gray-750 text-gray-400 hover:text-white font-bold rounded-xl text-sm transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <ArrowLeft className="w-4 h-4" /> Back
                 </button>
                 <button
                   disabled={!tempPos}
                   onClick={handleConfirmArmy}
-                  className="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition-all disabled:opacity-40 flex items-center gap-1.5 cursor-pointer"
+                  className="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-sm transition-all disabled:opacity-40 flex items-center gap-1.5 cursor-pointer"
                 >
                   Confirm Selection <CheckCircle className="w-4 h-4" />
                 </button>
@@ -313,28 +313,28 @@ const Organizations = () => {
               </div>
 
               <div className="space-y-2">
-                <h2 className="text-xl font-bold text-white">Target Track Confirmed!</h2>
-                <p className="text-gray-500 text-xs">Your army target parameters have been successfully set.</p>
+                <h2 className="text-2xl font-bold text-white">Target Track Confirmed!</h2>
+                <p className="text-gray-400 text-sm">Your army target parameters have been successfully set.</p>
               </div>
 
               <div className="glass-panel p-5 rounded-2xl border border-gray-850 space-y-3.5 text-left">
                 <div className="flex items-center justify-between border-b border-gray-850 pb-2">
-                  <span className="text-gray-500 text-xs font-semibold uppercase">Department</span>
-                  <span className="text-white text-xs font-bold">{tempDept?.name}</span>
+                  <span className="text-gray-400 text-sm font-semibold uppercase">Department</span>
+                  <span className="text-white text-sm font-bold">{tempDept?.name}</span>
                 </div>
                 <div className="flex items-center justify-between border-b border-gray-850 pb-2">
-                  <span className="text-gray-500 text-xs font-semibold uppercase">Category</span>
-                  <span className="text-white text-xs font-bold">{tempSub} Entry</span>
+                  <span className="text-gray-400 text-sm font-semibold uppercase">Category</span>
+                  <span className="text-white text-sm font-bold">{tempSub} Entry</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-500 text-xs font-semibold uppercase">Target post</span>
-                  <span className="text-primary-400 text-xs font-bold">{tempPos}</span>
+                  <span className="text-gray-400 text-sm font-semibold uppercase">Target post</span>
+                  <span className="text-primary-400 text-sm font-bold">{tempPos}</span>
                 </div>
               </div>
 
               <button
                 onClick={handleFinish}
-                className="w-full bg-primary-600 hover:bg-primary-500 text-white font-bold py-3.5 px-4 rounded-xl text-sm transition-all shadow-lg flex items-center justify-center gap-1.5 cursor-pointer"
+                className="w-full bg-primary-600 hover:bg-primary-500 text-white font-bold py-3.5 px-4 rounded-xl text-base transition-all shadow-lg flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 Go to Department Hub <ArrowRight className="w-4 h-4" />
               </button>
