@@ -1,7 +1,8 @@
 import { Outlet, Navigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { motion } from 'framer-motion';
-import { Shield, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
+import logoImg from '../assets/logo.png';
 
 const AuthLayout = () => {
   const { user, loading } = useAuth();
@@ -40,14 +41,9 @@ const AuthLayout = () => {
           </div>
 
           {/* App Logo */}
-          <Link to="/" className="flex flex-col items-center mb-8 hover:opacity-90 group transition-all">
-            <div className="w-14 h-14 bg-primary-600/20 border border-primary-500/30 rounded-xl flex items-center justify-center mb-3 group-hover:scale-105 transition-all">
-              <Shield className="w-8 h-8 text-primary-500" />
-            </div>
-            <h1 className="text-2xl font-extrabold tracking-tight text-white flex items-center gap-1">
-              Force<span className="text-primary-500">Ready</span> AI
-            </h1>
-            <p className="text-gray-400 text-xs mt-1">Defense & Civil Services Preparation Hub</p>
+          <Link to="/" className="flex flex-col items-center mb-6 hover:opacity-90 group transition-all">
+            <img src={logoImg} alt="ForceReady.AI Logo" className="h-24 w-auto mb-2 group-hover:scale-105 transition-all" />
+            <p className="text-gray-400 text-sm font-medium">Defense & Civil Services Preparation Hub</p>
           </Link>
 
           {/* Sub-routes (Login / Register forms) */}

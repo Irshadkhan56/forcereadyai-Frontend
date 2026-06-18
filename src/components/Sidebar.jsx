@@ -1,16 +1,17 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useSelection } from '../context/SelectionContext';
-import {
-  LayoutDashboard,
-  Building2,
-  MessageSquareText,
-  Activity,
-  HeartPulse,
-  User,
-  Shield,
-  ChevronRight,
-  Award,
-} from 'lucide-react';
+import { 
+  FaTachometerAlt, 
+  FaBuilding, 
+  FaComments, 
+  FaRunning, 
+  FaHeartbeat, 
+  FaUserAlt,
+  FaChevronRight,
+  FaLightbulb
+} from 'react-icons/fa';
+import { FaShieldHalved } from 'react-icons/fa6';
+import logoImg from '../assets/logo.png';
 
 const Sidebar = ({ onClose }) => {
   const location = useLocation();
@@ -20,12 +21,12 @@ const Sidebar = ({ onClose }) => {
     {
       name: 'Dashboard',
       path: '/dashboard',
-      icon: LayoutDashboard,
+      icon: FaTachometerAlt,
     },
     {
       name: 'Departments',
       path: '/departments',
-      icon: Building2,
+      icon: FaBuilding,
     },
   ];
 
@@ -36,23 +37,23 @@ const Sidebar = ({ onClose }) => {
       {
         name: `${selectedDepartment.name} Hub`,
         path: `/department/${slug}`,
-        icon: Shield,
+        icon: FaShieldHalved,
         exact: true,
       },
       {
         name: 'Interview Practice',
         path: `/department/${slug}/interview`,
-        icon: MessageSquareText,
+        icon: FaComments,
       },
       {
         name: 'Physical Preparation',
         path: `/department/${slug}/physical`,
-        icon: Activity,
+        icon: FaRunning,
       },
       {
         name: 'Medical Checklist',
         path: `/department/${slug}/medical`,
-        icon: HeartPulse,
+        icon: FaHeartbeat,
       }
     );
   }
@@ -61,20 +62,15 @@ const Sidebar = ({ onClose }) => {
   navItems.push({
     name: 'Profile',
     path: '/profile',
-    icon: User,
+    icon: FaUserAlt,
   });
 
   return (
     <div className="flex flex-col h-full">
       {/* Brand logo header */}
-      <div className="flex items-center gap-2 mb-10">
-        <div className="w-8 h-8 bg-primary-600/20 border border-primary-500/30 rounded-lg flex items-center justify-center">
-          <Shield className="w-5 h-5 text-primary-500" />
-        </div>
-        <Link to="/dashboard" className="font-extrabold text-xl tracking-tight text-white" onClick={onClose}>
-          Force<span className="text-primary-500">Ready</span> AI
-        </Link>
-      </div>
+      <Link to="/dashboard" className="flex items-center mb-8 px-2" onClick={onClose}>
+        <img src={logoImg} alt="ForceReady.AI Logo" className="h-10 w-auto hover:opacity-90 transition-all" />
+      </Link>
 
       {/* Navigation menu */}
       <nav className="flex-1 space-y-1">
@@ -98,7 +94,7 @@ const Sidebar = ({ onClose }) => {
                 <Icon className={`w-5 h-5 ${isActive ? 'text-primary-500' : ''}`} />
                 {item.name}
               </div>
-              {isActive && <ChevronRight className="w-4 h-4 text-primary-500" />}
+              {isActive && <FaChevronRight className="w-3.5 h-3.5 text-primary-500" />}
             </Link>
           );
         })}
@@ -113,7 +109,7 @@ const Sidebar = ({ onClose }) => {
           className="flex flex-col gap-2 p-3.5 bg-primary-600/10 border border-primary-500/15 rounded-xl hover:border-primary-500/35 transition-all text-left group"
         >
           <div className="flex items-center gap-2 text-[10px] uppercase font-black tracking-wider text-primary-400">
-            <Award className="w-4 h-4 animate-pulse" /> Intelligence Prep
+            <FaLightbulb className="w-4 h-4 animate-pulse" /> Intelligence Prep
           </div>
           <span className="text-white text-xs font-bold leading-normal">Practice Intelligence Tests</span>
           <span className="text-[10px] text-gray-500 leading-normal">Access Verbal, Non-Verbal, & Academic practice tests.</span>

@@ -3,7 +3,6 @@ import { useAuth } from '../context/AuthContext';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import {
-  Shield,
   ArrowRight,
   MessageSquareText,
   Activity,
@@ -16,6 +15,7 @@ import {
   Sun,
   Moon,
 } from 'lucide-react';
+import logoImg from '../assets/logo.png';
 
 const Landing = () => {
   const { user, logout } = useAuth();
@@ -129,12 +129,7 @@ const Landing = () => {
       {/* HEADER NAVBAR */}
       <header className="relative z-10 w-full max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-primary-600/20 border border-primary-500/30 rounded-lg flex items-center justify-center">
-            <Shield className="w-5 h-5 text-primary-500" />
-          </div>
-          <span className="font-extrabold text-xl tracking-tight">
-            Force<span className="text-primary-500">Ready</span> AI
-          </span>
+          <img src={logoImg} alt="ForceReady.AI Logo" className="h-10 w-auto" />
         </div>
 
         <div className="flex items-center gap-4">
@@ -409,10 +404,7 @@ const Landing = () => {
       <footer className="relative z-10 w-full border-t border-gray-900/60 bg-dark-950/80 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-6 py-12 flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-gray-500">
           <div className="flex items-center gap-2">
-            <Shield className="w-5 h-5 text-primary-500" />
-            <span className="font-bold text-white">
-              Force<span className="text-primary-500">Ready</span> AI
-            </span>
+            <img src={logoImg} alt="ForceReady.AI Logo" className="h-8 w-auto" />
           </div>
 
           <p>© {new Date().getFullYear()} ForceReady AI. All rights reserved. Prepared for Defense & Administrative Services.</p>

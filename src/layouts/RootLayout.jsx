@@ -16,6 +16,7 @@ import {
   Shield,
   ChevronRight,
 } from 'lucide-react';
+import logoImg from '../assets/logo.png';
 
 const RootLayout = () => {
   const { user, loading, logout } = useAuth();
@@ -96,10 +97,7 @@ const RootLayout = () => {
             >
               <div className="flex items-center justify-between mb-8">
                 <Link to="/dashboard" className="flex items-center gap-2" onClick={() => setSidebarOpen(false)}>
-                  <Shield className="w-6 h-6 text-primary-500" />
-                  <span className="font-extrabold text-lg tracking-tight">
-                    Force<span className="text-primary-500">Ready</span>
-                  </span>
+                  <img src={logoImg} alt="ForceReady.AI Logo" className="h-8 w-auto" />
                 </Link>
                 <button
                   onClick={() => setSidebarOpen(false)}
@@ -164,14 +162,9 @@ const RootLayout = () => {
 
       {/* DESKTOP SIDEBAR */}
       <aside className="hidden md:flex flex-col w-64 glass-panel border-y-0 border-l-0 p-6 relative z-30">
-        <div className="flex items-center gap-2 mb-10">
-          <div className="w-8 h-8 bg-primary-600/20 border border-primary-500/30 rounded-lg flex items-center justify-center">
-            <Shield className="w-5 h-5 text-primary-500" />
-          </div>
-          <Link to="/dashboard" className="font-extrabold text-xl tracking-tight">
-            Force<span className="text-primary-500">Ready</span> AI
-          </Link>
-        </div>
+        <Link to="/dashboard" className="flex items-center mb-10 px-2">
+          <img src={logoImg} alt="ForceReady.AI Logo" className="h-10 w-auto" />
+        </Link>
 
         <nav className="flex-1 space-y-1">
           {navItems.map((item) => {
