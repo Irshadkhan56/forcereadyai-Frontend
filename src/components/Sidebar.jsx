@@ -9,6 +9,7 @@ import {
   User,
   Shield,
   ChevronRight,
+  Award,
 } from 'lucide-react';
 
 const Sidebar = ({ onClose }) => {
@@ -102,6 +103,22 @@ const Sidebar = ({ onClose }) => {
           );
         })}
       </nav>
+
+      {/* External Intelligence Prep Link at the bottom of the Sidebar */}
+      <div className="mt-auto pt-6 border-t border-gray-850">
+        <a
+          href="https://smart-prep-ai-jet.vercel.app"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex flex-col gap-2 p-3.5 bg-primary-600/10 border border-primary-500/15 rounded-xl hover:border-primary-500/35 transition-all text-left group"
+        >
+          <div className="flex items-center gap-2 text-[10px] uppercase font-black tracking-wider text-primary-400">
+            <Award className="w-4 h-4 animate-pulse" /> Intelligence Prep
+          </div>
+          <span className="text-white text-xs font-bold leading-normal">Practice Intelligence Tests</span>
+          <span className="text-[10px] text-gray-500 leading-normal">Access Verbal, Non-Verbal, & Academic practice tests.</span>
+        </a>
+      </div>
     </div>
   );
 };

@@ -135,27 +135,6 @@ const Dashboard = () => {
         )}
       </div>
 
-      {/* EXTERNAL PRACTICE LINK CARD */}
-      <div className="glass-panel p-4 rounded-xl border border-primary-500/20 bg-gradient-to-r from-primary-950/10 to-purple-950/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3 text-left">
-          <div className="w-8 h-8 rounded-lg bg-primary-600/15 border border-primary-500/25 flex items-center justify-center text-primary-400 flex-shrink-0">
-            <Award className="w-4 h-4 animate-pulse" />
-          </div>
-          <div>
-            <h4 className="font-bold text-white text-xs">Academic & Intelligence Test Practice</h4>
-            <p className="text-[10px] text-gray-500 mt-0.5">Prepare for Verbal, Non-Verbal, and Academic intelligence tests here.</p>
-          </div>
-        </div>
-        <a
-          href="https://smart-prep-ai-jet.vercel.app" 
-          target="_blank"
-          rel="noopener noreferrer"
-          className="px-4 py-2 border border-primary-500/30 hover:border-primary-500 bg-primary-500/10 hover:bg-primary-500/20 text-white text-[10px] font-bold rounded-lg transition-all flex items-center gap-1 cursor-pointer w-full sm:w-auto justify-center"
-        >
-          Practice Intelligence Tests <ArrowRight className="w-3 h-3" />
-        </a>
-      </div>
-
       {selectedDepartment ? (
         <>
           {/* 2. THREE-DIMENSIONAL SCORES GRID */}
