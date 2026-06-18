@@ -174,13 +174,13 @@ const MockInterviews = () => {
       <div className="glass-panel p-10 rounded-2xl text-center space-y-5 max-w-lg mx-auto">
         <Lock className="w-12 h-12 text-primary-500 mx-auto" />
         <h2 className="text-xl font-bold text-white">Target Department Required</h2>
-        <p className="text-gray-400 text-xs leading-relaxed">
+        <p className="text-gray-300 text-sm leading-relaxed">
           You must select your active target department before simulating mock board interviews.
         </p>
         <div className="pt-2">
           <Link
             to="/departments"
-            className="inline-flex items-center gap-1.5 px-6 py-3.5 bg-primary-600 hover:bg-primary-500 text-white font-bold rounded-xl text-xs transition-all shadow-md"
+            className="inline-flex items-center gap-1.5 px-6 py-3.5 bg-primary-600 hover:bg-primary-500 text-white font-bold rounded-xl text-sm transition-all shadow-md"
           >
             Select Department <ArrowRight className="w-4 h-4" />
           </Link>
@@ -195,7 +195,7 @@ const MockInterviews = () => {
         <Loader2 className="w-12 h-12 text-primary-500 animate-spin mx-auto" />
         <div className="space-y-2">
           <h2 className="text-xl font-bold text-white">Loading Interview Questions</h2>
-          <p className="text-gray-400 text-xs max-w-sm mx-auto leading-relaxed">
+          <p className="text-gray-300 text-sm max-w-sm mx-auto leading-relaxed">
             Fetching exam prep questions from the database for <span className="text-white font-semibold">{selectedPosition || selectedDepartment.name}</span>.
           </p>
         </div>
@@ -212,7 +212,7 @@ const MockInterviews = () => {
         <div className="lg:col-span-2 space-y-6">
           <div className="glass-panel p-8 rounded-2xl space-y-6">
             <div className="flex items-center justify-between border-b border-gray-800/80 pb-4">
-              <div className="flex items-center gap-2 text-xs font-bold text-gray-400">
+              <div className="flex items-center gap-2 text-sm font-bold text-gray-300">
                 <span className="px-2 py-0.5 bg-primary-600/20 text-primary-400 rounded-md">
                   Q {currentQuestionIdx + 1} of {currentSession.questions.length}
                 </span>
@@ -220,20 +220,20 @@ const MockInterviews = () => {
                   {currentQuestion.category}
                 </span>
               </div>
-              <div className="flex items-center gap-1.5 text-xs text-gray-500 font-mono">
+              <div className="flex items-center gap-1.5 text-sm text-gray-400 font-mono">
                 <TimerIcon className="w-4 h-4" /> {formatTime(secondsElapsed)}
               </div>
             </div>
 
             <div className="py-2">
-              <span className="text-xs text-gray-500 font-semibold uppercase tracking-wider block mb-2">Simulation Question</span>
+              <span className="text-sm text-gray-400 font-semibold uppercase tracking-wider block mb-2">Simulation Question</span>
               <p className="text-xl font-bold text-white leading-relaxed">{currentQuestion.question}</p>
             </div>
 
             {sessionState === 'active' ? (
               <form onSubmit={handleSubmitAnswer} className="space-y-4">
                 <div>
-                  <label className="block text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2">
+                  <label className="block text-gray-300 text-sm font-semibold uppercase tracking-wider mb-2">
                     Your Response
                   </label>
                   <textarea
@@ -251,7 +251,7 @@ const MockInterviews = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting || !answerText.trim()}
-                    className="px-6 py-3.5 bg-primary-600 hover:bg-primary-500 active:bg-primary-700 text-white font-bold rounded-xl text-xs transition-all shadow-md flex items-center gap-1.5 cursor-pointer disabled:opacity-40"
+                    className="px-6 py-3.5 bg-primary-600 hover:bg-primary-500 active:bg-primary-700 text-white font-bold rounded-xl text-sm transition-all shadow-md flex items-center gap-1.5 cursor-pointer disabled:opacity-40"
                   >
                     {isSubmitting ? (
                       <>
@@ -267,7 +267,7 @@ const MockInterviews = () => {
               </form>
             ) : (
               <div className="space-y-3 bg-gray-950/40 p-5 border border-gray-850 rounded-xl">
-                <span className="text-xs text-gray-500 font-semibold uppercase tracking-wider block">Your Submitted Response</span>
+                <span className="text-sm text-gray-400 font-semibold uppercase tracking-wider block">Your Submitted Response</span>
                 <p className="text-sm text-gray-300 italic">"{answerText}"</p>
               </div>
             )}
@@ -278,31 +278,31 @@ const MockInterviews = () => {
           {sessionState === 'evaluation' && feedback && (
             <div className="glass-panel p-6 rounded-2xl border border-gray-800 space-y-6 animate-fadeIn">
               <div className="flex items-center justify-between border-b border-gray-800 pb-3">
-                <h3 className="font-bold text-white text-sm">Gemini AI Feedback</h3>
+                <h3 className="font-bold text-white text-base">Gemini AI Feedback</h3>
                 <div className="flex items-center gap-1">
-                  <span className="text-xl font-black text-primary-400">{feedback.score}</span>
-                  <span className="text-xs text-gray-500">/100</span>
+                  <span className="text-2xl font-black text-primary-400">{feedback.score}</span>
+                  <span className="text-xs text-gray-400">/100</span>
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Strengths</span>
-                <p className="text-xs text-gray-300 leading-relaxed">{feedback.strengths}</p>
+                <span className="text-xs text-emerald-400 font-bold uppercase tracking-wider">Strengths</span>
+                <p className="text-sm text-gray-300 leading-relaxed">{feedback.strengths}</p>
               </div>
 
               <div className="space-y-1.5">
-                <span className="text-[10px] text-red-400 font-bold uppercase tracking-wider">Weaknesses</span>
-                <p className="text-xs text-gray-300 leading-relaxed">{feedback.weaknesses}</p>
+                <span className="text-xs text-red-400 font-bold uppercase tracking-wider">Weaknesses</span>
+                <p className="text-sm text-gray-300 leading-relaxed">{feedback.weaknesses}</p>
               </div>
 
               <div className="space-y-1.5">
-                <span className="text-[10px] text-amber-400 font-bold uppercase tracking-wider">Suggestions</span>
-                <p className="text-xs text-gray-300 leading-relaxed">{feedback.suggestions}</p>
+                <span className="text-xs text-amber-400 font-bold uppercase tracking-wider">Suggestions</span>
+                <p className="text-sm text-gray-300 leading-relaxed">{feedback.suggestions}</p>
               </div>
 
               <button
                 onClick={handleNextQuestion}
-                className="w-full bg-primary-600 hover:bg-primary-500 text-white font-bold py-3 px-4 rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
+                className="w-full bg-primary-600 hover:bg-primary-500 text-white font-bold py-3 px-4 rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 {currentQuestionIdx === currentSession.questions.length - 1 ? (
                   <>
@@ -329,7 +329,7 @@ const MockInterviews = () => {
         </div>
         <div className="space-y-2">
           <h2 className="text-xl font-bold text-white">Interview Simulation Complete</h2>
-          <p className="text-gray-400 text-xs max-w-sm mx-auto leading-relaxed">
+          <p className="text-gray-300 text-sm max-w-sm mx-auto leading-relaxed">
             All questions have been evaluated. Your average mock score has been updated in the database and overall readiness recalculated.
           </p>
         </div>
@@ -337,13 +337,13 @@ const MockInterviews = () => {
         <div className="flex gap-4">
           <button
             onClick={() => setSessionState('idle')}
-            className="flex-1 border border-gray-800 hover:border-gray-700 bg-gray-900/40 text-white font-bold py-3 px-4 rounded-xl text-xs transition-all cursor-pointer"
+            className="flex-1 border border-gray-800 hover:border-gray-700 bg-gray-900/40 text-white font-bold py-3 px-4 rounded-xl text-sm transition-all cursor-pointer"
           >
             View History
           </button>
           <Link
             to={`/department/${selectedDepartment.slug}`}
-            className="flex-1 bg-primary-600 hover:bg-primary-500 text-white font-bold py-3 px-4 rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-1.5"
+            className="flex-1 bg-primary-600 hover:bg-primary-500 text-white font-bold py-3 px-4 rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-1.5"
           >
             Go to Hub
           </Link>
@@ -362,7 +362,7 @@ const MockInterviews = () => {
           <h1 className="text-2xl font-extrabold text-white">
             Active Target: <span className="text-primary-500">{selectedPosition || selectedDepartment.name}</span>
           </h1>
-          <p className="text-gray-400 text-sm max-w-xl">
+          <p className="text-gray-300 text-base max-w-xl">
             Simulate a realistic 20-question interview board. Get scored instantly out of 100 on content, terminology, and logical reasoning.
           </p>
         </div>
@@ -370,14 +370,14 @@ const MockInterviews = () => {
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={() => handleStartInterview(false)}
-            className="flex items-center gap-1.5 px-5 py-3 border border-gray-800 hover:border-gray-750 bg-gray-900/40 text-white text-xs font-bold rounded-xl transition-all hover:bg-gray-900 cursor-pointer"
+            className="flex items-center gap-1.5 px-5 py-3.5 border border-gray-800 hover:border-gray-750 bg-gray-900/40 text-white text-sm font-bold rounded-xl transition-all hover:bg-gray-900 cursor-pointer"
           >
             <Keyboard className="w-4 h-4 text-gray-400" /> Standard Written Board
           </button>
           
           <button
             onClick={() => handleStartInterview(true)}
-            className="flex items-center gap-1.5 px-6 py-3 bg-primary-600 hover:bg-primary-500 active:bg-primary-700 text-white text-xs font-bold rounded-xl transition-all shadow-lg hover:shadow-primary-500/20 cursor-pointer"
+            className="flex items-center gap-1.5 px-6 py-3.5 bg-primary-600 hover:bg-primary-500 active:bg-primary-700 text-white text-sm font-bold rounded-xl transition-all shadow-lg hover:shadow-primary-500/20 cursor-pointer"
           >
             <Mic className="w-4 h-4 fill-current" /> Start Voice Board Mode
           </button>
@@ -386,10 +386,10 @@ const MockInterviews = () => {
 
       <div className="space-y-4">
         <div>
-          <h2 className="text-lg font-bold text-white flex items-center gap-2">
-            <History className="w-5 h-5 text-gray-500" /> Historical Session Logs
+          <h2 className="text-xl font-bold text-white flex items-center gap-2">
+            <History className="w-5 h-5 text-primary-400" /> Historical Session Logs
           </h2>
-          <p className="text-gray-500 text-xs mt-0.5">Review scores and comments of your past interview attempts</p>
+          <p className="text-gray-300 text-sm mt-1">Review scores and comments of your past interview attempts</p>
         </div>
 
         {loadingHistory ? (
@@ -398,9 +398,9 @@ const MockInterviews = () => {
           </div>
         ) : !historyData || historyData.length === 0 ? (
           <div className="glass-panel p-8 rounded-2xl border border-gray-850 text-center space-y-3">
-            <HelpCircle className="w-12 h-12 text-gray-700 mx-auto" />
+            <HelpCircle className="w-12 h-12 text-gray-750 mx-auto" />
             <h4 className="font-bold text-white">No Sessions Found</h4>
-            <p className="text-gray-500 text-xs max-w-sm mx-auto leading-relaxed">
+            <p className="text-gray-400 text-sm max-w-sm mx-auto leading-relaxed">
               You haven't completed any mock interview simulation sessions yet.
             </p>
           </div>
@@ -417,8 +417,8 @@ const MockInterviews = () => {
                 </button>
 
                 <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-xs">
-                    <span className="px-2 py-0.5 bg-gray-900 border border-gray-800 text-gray-400 rounded-md font-medium">
+                  <div className="flex items-center gap-2 text-sm">
+                    <span className="px-2 py-0.5 bg-gray-900 border border-gray-800 text-gray-300 rounded-md font-medium">
                       {sess.departmentId?.name}
                     </span>
                     {sess.position && (
@@ -428,15 +428,15 @@ const MockInterviews = () => {
                     )}
                   </div>
 
-                  <h3 className="font-bold text-sm text-white">{sess.questions.length} Simulation Questions</h3>
-                  <p className="text-[10px] text-gray-500 font-mono">Attempted: {new Date(sess.createdAt).toLocaleDateString()}</p>
+                  <h3 className="font-bold text-base text-white">{sess.questions.length} Simulation Questions</h3>
+                  <p className="text-xs text-gray-400 font-mono">Attempted: {new Date(sess.createdAt).toLocaleDateString()}</p>
                 </div>
 
                 <div className="flex items-center justify-between border-t border-gray-850/80 pt-4">
-                  <span className="text-gray-500 text-xs font-semibold">Average Mock Score</span>
+                  <span className="text-gray-400 text-sm font-semibold">Average Mock Score</span>
                   <div className="flex items-center gap-1 bg-primary-600/10 border border-primary-500/20 px-3 py-1 rounded-lg">
-                    <span className="text-sm font-black text-primary-400">{sess.totalScore}</span>
-                    <span className="text-[10px] text-gray-500">/100</span>
+                    <span className="text-base font-black text-primary-400">{sess.totalScore}</span>
+                    <span className="text-xs text-gray-400">/100</span>
                   </div>
                 </div>
               </div>
