@@ -40,7 +40,7 @@ const Navbar = ({ onMenuOpen }) => {
 
       {/* Empty space for alignment in desktop / Brand on mobile */}
       <div className="hidden md:block">
-        <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Candidate Preparation Panel</span>
+        <span className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Candidate Preparation Panel</span>
       </div>
 
       {/* Right Navbar Controls */}
@@ -68,8 +68,8 @@ const Navbar = ({ onMenuOpen }) => {
             </div>
           )}
           <div className="hidden sm:block text-left">
-            <p className="text-xs font-bold text-white truncate max-w-[120px]">{user?.name}</p>
-            <p className="text-[10px] text-gray-500 truncate max-w-[120px]">{user?.email}</p>
+            <p className="text-sm font-bold text-white truncate max-w-[120px]">{user?.name}</p>
+            <p className="text-xs text-gray-400 truncate max-w-[120px]">{user?.email}</p>
           </div>
 
           <button

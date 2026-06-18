@@ -1,7 +1,18 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { User, Mail, Lock, Calendar, BookOpen, Loader2, AlertCircle, Camera, Eye, EyeOff } from 'lucide-react';
+import {
+  FaUserAlt,
+  FaEnvelope,
+  FaLock,
+  FaCalendarAlt,
+  FaBookOpen,
+  FaCamera,
+  FaEye,
+  FaEyeSlash,
+  FaSpinner,
+  FaExclamationTriangle,
+} from 'react-icons/fa';
 
 const Register = () => {
   const { register } = useAuth();
@@ -57,11 +68,11 @@ const Register = () => {
 
   return (
     <div>
-      <h2 className="text-xl font-bold text-white mb-6 text-center">Create Candidate Account</h2>
+      <h2 className="text-2xl font-bold text-white mb-6 text-center">Create Candidate Account</h2>
 
       {error && (
         <div className="mb-5 p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-start gap-3 text-black dark:text-white text-sm animate-shake">
-          <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+          <FaExclamationTriangle className="w-5 h-5 flex-shrink-0 mt-0.5" />
           <span>{error}</span>
         </div>
       )}
@@ -78,7 +89,7 @@ const Register = () => {
               />
             ) : (
               <div className="flex flex-col items-center text-gray-500 group-hover:text-primary-500 transition-colors">
-                <Camera className="w-6 h-6" />
+                <FaCamera className="w-6 h-6" />
               </div>
             )}
             <input
@@ -89,23 +100,23 @@ const Register = () => {
               disabled={submitting}
             />
           </div>
-          <span className="text-[10px] text-gray-550 font-semibold uppercase tracking-wider">
+          <span className="text-xs text-gray-400 font-semibold uppercase tracking-wider">
             {profileImage ? 'Change Image' : 'Upload Profile Photo (Optional)'}
           </span>
         </div>
 
         <div>
-          <label className="block text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2">
+          <label className="block text-gray-300 text-sm font-semibold uppercase tracking-wider mb-2">
             Full Name
           </label>
           <div className="relative">
-            <User className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-500" />
+            <FaUserAlt className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-500" />
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. Asim Bajwa"
-              className="w-full glass-input rounded-xl py-3 pl-11 pr-4 text-sm text-white placeholder-gray-600 focus:outline-none"
+              className="w-full glass-input rounded-xl py-3 pl-11 pr-4 text-sm text-white placeholder-gray-650 focus:outline-none"
               disabled={submitting}
               required
             />
@@ -113,17 +124,17 @@ const Register = () => {
         </div>
 
         <div>
-          <label className="block text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2">
+          <label className="block text-gray-300 text-sm font-semibold uppercase tracking-wider mb-2">
             Email Address
           </label>
           <div className="relative">
-            <Mail className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-500" />
+            <FaEnvelope className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-500" />
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="e.g. recruit@domain.com"
-              className="w-full glass-input rounded-xl py-3 pl-11 pr-4 text-sm text-white placeholder-gray-600 focus:outline-none"
+              className="w-full glass-input rounded-xl py-3 pl-11 pr-4 text-sm text-white placeholder-gray-650 focus:outline-none"
               disabled={submitting}
               required
             />
@@ -131,17 +142,17 @@ const Register = () => {
         </div>
 
         <div>
-          <label className="block text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2">
+          <label className="block text-gray-300 text-sm font-semibold uppercase tracking-wider mb-2">
             Password
           </label>
           <div className="relative">
-            <Lock className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-500" />
+            <FaLock className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-500" />
             <input
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Min. 6 characters"
-              className="w-full glass-input rounded-xl py-3 pl-11 pr-10 text-sm text-white placeholder-gray-600 focus:outline-none"
+              className="w-full glass-input rounded-xl py-3 pl-11 pr-10 text-sm text-white placeholder-gray-650 focus:outline-none"
               disabled={submitting}
               required
             />
@@ -151,24 +162,24 @@ const Register = () => {
               className="absolute right-3 top-3.5 text-gray-500 hover:text-white transition-colors cursor-pointer"
               tabIndex={-1}
             >
-              {showPassword ? <EyeOff className="w-4.5 h-4.5" /> : <Eye className="w-4.5 h-4.5" />}
+              {showPassword ? <FaEyeSlash className="w-4.5 h-4.5" /> : <FaEye className="w-4.5 h-4.5" />}
             </button>
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2">
+            <label className="block text-gray-300 text-sm font-semibold uppercase tracking-wider mb-2">
               Age
             </label>
             <div className="relative">
-              <Calendar className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-500" />
+              <FaCalendarAlt className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-500" />
               <input
                 type="number"
                 value={age}
                 onChange={(e) => setAge(e.target.value)}
                 placeholder="Years"
-                className="w-full glass-input rounded-xl py-3 pl-11 pr-4 text-sm text-white placeholder-gray-600 focus:outline-none"
+                className="w-full glass-input rounded-xl py-3 pl-11 pr-4 text-sm text-white placeholder-gray-650 focus:outline-none"
                 disabled={submitting}
                 required
               />
@@ -176,17 +187,17 @@ const Register = () => {
           </div>
 
           <div>
-            <label className="block text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2">
+            <label className="block text-gray-300 text-sm font-semibold uppercase tracking-wider mb-2">
               Education
             </label>
             <div className="relative">
-              <BookOpen className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-500" />
+              <FaBookOpen className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-500" />
               <input
                 type="text"
                 value={education}
                 onChange={(e) => setEducation(e.target.value)}
                 placeholder="e.g. Bachelor"
-                className="w-full glass-input rounded-xl py-3 pl-11 pr-4 text-sm text-white placeholder-gray-600 focus:outline-none"
+                className="w-full glass-input rounded-xl py-3 pl-11 pr-4 text-sm text-white placeholder-gray-650 focus:outline-none"
                 disabled={submitting}
                 required
               />
@@ -201,7 +212,7 @@ const Register = () => {
         >
           {submitting ? (
             <>
-              <Loader2 className="w-5 h-5 animate-spin" />
+              <FaSpinner className="w-5 h-5 animate-spin" />
               Registering...
             </>
           ) : (

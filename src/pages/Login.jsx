@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Mail, Lock, Loader2, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaSpinner, FaExclamationTriangle } from 'react-icons/fa';
 
 const Login = () => {
   const { login } = useAuth();
@@ -35,28 +35,28 @@ const Login = () => {
 
   return (
     <div>
-      <h2 className="text-xl font-bold text-white mb-6 text-center">Sign In to Your Account</h2>
+      <h2 className="text-2xl font-bold text-white mb-6 text-center">Sign In to Your Account</h2>
 
       {error && (
         <div className="mb-5 p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-start gap-3 text-black dark:text-white text-sm animate-shake">
-          <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+          <FaExclamationTriangle className="w-5 h-5 flex-shrink-0 mt-0.5" />
           <span>{error}</span>
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2">
+          <label className="block text-gray-300 text-sm font-semibold uppercase tracking-wider mb-2">
             Email Address
           </label>
           <div className="relative">
-            <Mail className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-500" />
+            <FaEnvelope className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-500" />
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="e.g. recruit@domain.com"
-              className="w-full glass-input rounded-xl py-3 pl-11 pr-4 text-sm text-white placeholder-gray-600 focus:outline-none"
+              className="w-full glass-input rounded-xl py-3 pl-11 pr-4 text-sm text-white placeholder-gray-650 focus:outline-none"
               disabled={submitting}
               required
             />
@@ -65,21 +65,21 @@ const Login = () => {
 
         <div>
           <div className="flex items-center justify-between mb-2">
-            <label className="block text-gray-400 text-xs font-semibold uppercase tracking-wider">
+            <label className="block text-gray-300 text-sm font-semibold uppercase tracking-wider">
               Password
             </label>
-            <Link to="/forgot-password" className="text-xs text-primary-400 hover:text-primary-300 font-bold transition-all">
+            <Link to="/forgot-password" className="text-sm text-primary-400 hover:text-primary-300 font-bold transition-all">
               Forgot Password?
             </Link>
           </div>
           <div className="relative">
-            <Lock className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-500" />
+            <FaLock className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-500" />
             <input
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full glass-input rounded-xl py-3 pl-11 pr-10 text-sm text-white placeholder-gray-600 focus:outline-none"
+              className="w-full glass-input rounded-xl py-3 pl-11 pr-10 text-sm text-white placeholder-gray-650 focus:outline-none"
               disabled={submitting}
               required
             />
@@ -89,7 +89,7 @@ const Login = () => {
               className="absolute right-3 top-3.5 text-gray-500 hover:text-white transition-colors cursor-pointer"
               tabIndex={-1}
             >
-              {showPassword ? <EyeOff className="w-4.5 h-4.5" /> : <Eye className="w-4.5 h-4.5" />}
+              {showPassword ? <FaEyeSlash className="w-4.5 h-4.5" /> : <FaEye className="w-4.5 h-4.5" />}
             </button>
           </div>
         </div>
@@ -101,7 +101,7 @@ const Login = () => {
         >
           {submitting ? (
             <>
-              <Loader2 className="w-5 h-5 animate-spin" />
+              <FaSpinner className="w-5 h-5 animate-spin" />
               Signing In...
             </>
           ) : (

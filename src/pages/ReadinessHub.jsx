@@ -5,18 +5,18 @@ import { useSelection } from '../context/SelectionContext';
 import api from '../services/api';
 import { motion } from 'framer-motion';
 import {
-  Award,
-  MessageSquareText,
-  Activity,
-  HeartPulse,
-  ChevronRight,
-  Loader2,
-  AlertCircle,
-  TrendingUp,
-  Shield,
-  ArrowLeft,
-  Settings,
-} from 'lucide-react';
+  FaAward,
+  FaComments,
+  FaRunning,
+  FaHeartbeat,
+  FaChevronRight,
+  FaSpinner,
+  FaExclamationCircle,
+  FaChartLine,
+  FaArrowLeft,
+  FaCog,
+} from 'react-icons/fa';
+import { FaShieldHalved } from 'react-icons/fa6';
 
 const ReadinessHub = () => {
   const { slug } = useParams();
@@ -70,8 +70,8 @@ const ReadinessHub = () => {
   if (loadingDept || loadingReadiness) {
     return (
       <div className="flex flex-col items-center justify-center py-20 gap-3">
-        <Loader2 className="w-8 h-8 text-primary-500 animate-spin" />
-        <p className="text-gray-500 text-sm">Gathering department statistics...</p>
+        <FaSpinner className="w-8 h-8 text-primary-500 animate-spin" />
+        <p className="text-gray-400 text-base">Gathering department statistics...</p>
       </div>
     );
   }
@@ -79,11 +79,11 @@ const ReadinessHub = () => {
   if (deptError || !department) {
     return (
       <div className="glass-panel p-8 rounded-2xl border border-red-500/10 text-center text-red-400 space-y-3 max-w-lg mx-auto">
-        <AlertCircle className="w-12 h-12 text-red-500/40 mx-auto" />
+        <FaExclamationCircle className="w-12 h-12 text-red-500/40 mx-auto" />
         <h3 className="font-bold text-white">Department Not Found</h3>
-        <p className="text-xs">The department slug you requested does not exist or has been deactivated.</p>
-        <Link to="/departments" className="mt-4 px-4 py-2 bg-gray-900 border border-gray-800 rounded-lg text-white text-xs hover:bg-gray-800 inline-flex items-center gap-1.5">
-          <ArrowLeft className="w-4 h-4" /> Back to Departments
+        <p className="text-sm text-gray-300">The department slug you requested does not exist or has been deactivated.</p>
+        <Link to="/departments" className="mt-4 px-4 py-2 bg-gray-900 border border-gray-800 rounded-lg text-white text-sm hover:bg-gray-800 inline-flex items-center gap-1.5">
+          <FaArrowLeft className="w-4 h-4" /> Back to Departments
         </Link>
       </div>
     );
@@ -135,15 +135,15 @@ const ReadinessHub = () => {
             </div>
             <div>
               <h1 className="text-xl md:text-3xl font-black text-white">{department.name}</h1>
-              <p className="text-xs text-gray-300 max-w-xl line-clamp-2 mt-1">{department.description}</p>
+              <p className="text-sm text-gray-300 max-w-xl line-clamp-2 mt-1">{department.description}</p>
             </div>
           </div>
           {department.hasSubCategories && (
             <Link
               to="/departments"
-              className="flex items-center gap-1.5 px-4 py-2 border border-white/10 hover:border-white/20 bg-white/5 hover:bg-white/10 text-white text-xs font-bold rounded-xl transition-all w-fit self-end md:self-auto cursor-pointer"
+              className="flex items-center gap-1.5 px-4 py-2.5 border border-white/10 hover:border-white/20 bg-white/5 hover:bg-white/10 text-white text-sm font-bold rounded-xl transition-all w-fit self-end md:self-auto cursor-pointer"
             >
-              <Settings className="w-4 h-4" /> Change Post ({selectedPosition || 'None'})
+              <FaCog className="w-4 h-4" /> Change Post ({selectedPosition || 'None'})
             </Link>
           )}
         </div>
@@ -154,8 +154,8 @@ const ReadinessHub = () => {
         {/* Readiness Index circular gauge */}
         <div className="glass-panel p-8 rounded-2xl border border-gray-850 flex flex-col items-center justify-center text-center space-y-5">
           <div>
-            <h3 className="font-extrabold text-white text-sm">Overall Preparedness</h3>
-            <p className="text-gray-500 text-[10px] uppercase font-bold tracking-wider mt-0.5">
+            <h3 className="font-extrabold text-white text-base">Overall Preparedness</h3>
+            <p className="text-gray-400 text-xs uppercase font-bold tracking-wider mt-0.5">
               {selectedPosition || 'General Standard'}
             </p>
           </div>
@@ -190,27 +190,27 @@ const ReadinessHub = () => {
               </defs>
             </svg>
             <div className="absolute text-center">
-              <span className="text-3xl font-black text-white">{progress.overallReadiness}%</span>
-              <span className="text-[10px] text-gray-500 font-bold block uppercase tracking-wider">Index</span>
+              <span className="text-4xl font-black text-white">{progress.overallReadiness}%</span>
+              <span className="text-xs text-gray-400 font-bold block uppercase tracking-wider">Index</span>
             </div>
           </div>
 
-          <div className="text-[10px] text-gray-500 leading-normal border-t border-gray-850 pt-4 w-full">
+          <div className="text-xs text-gray-400 leading-normal border-t border-gray-850 pt-4 w-full">
             Weighted metrics: <br />
-            <span className="text-gray-400 font-semibold">40% Interview + 40% Physical + 20% Medical</span>
+            <span className="text-gray-300 font-semibold">40% Interview + 40% Physical + 20% Medical</span>
           </div>
         </div>
 
         {/* Breakdown of Prep Modules */}
         <div className="lg:col-span-2 space-y-6">
-          <div className={`p-4 rounded-xl border flex items-start gap-3 text-xs leading-normal font-semibold ${
+          <div className={`p-4 rounded-xl border flex items-start gap-3 text-sm leading-normal font-semibold ${
             details.medical.failedCriteria > 0
               ? 'bg-red-500/10 border-red-500/20 text-red-400'
               : progress.overallReadiness < 60
               ? 'bg-amber-500/10 border-amber-500/20 text-amber-400'
               : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
           }`}>
-            <TrendingUp className="w-5 h-5 flex-shrink-0 mt-0.5" />
+            <FaChartLine className="w-5 h-5 flex-shrink-0 mt-0.5" />
             <span>{alertRecommendation}</span>
           </div>
 
@@ -220,20 +220,20 @@ const ReadinessHub = () => {
             <div className="glass-panel p-5 rounded-2xl border border-gray-850 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div className="flex gap-4">
                 <div className="w-10 h-10 rounded-xl bg-purple-500/15 border border-purple-500/25 flex items-center justify-center text-purple-400 flex-shrink-0">
-                  <MessageSquareText className="w-5 h-5" />
+                  <FaComments className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-sm text-white">Interview Practice</h4>
-                  <p className="text-[10px] text-gray-500 mt-0.5">Mock questions and AI verbal evaluation</p>
+                  <h4 className="font-bold text-base text-white">Interview Practice</h4>
+                  <p className="text-xs text-gray-400 mt-0.5">Mock questions and AI verbal evaluation</p>
                 </div>
               </div>
               <div className="flex items-center gap-5 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-t-0 border-gray-850 pt-3 sm:pt-0">
                 <div className="text-right">
-                  <span className="text-[10px] text-gray-500 block uppercase font-bold">Mock Average</span>
-                  <span className="text-xs font-bold text-purple-400">{progress.interviewReadiness}% score</span>
+                  <span className="text-xs text-gray-400 block uppercase font-bold">Mock Average</span>
+                  <span className="text-sm font-bold text-purple-400">{progress.interviewReadiness}% score</span>
                 </div>
                 <Link to={`/department/${slug}/interview`} className="p-2 border border-gray-850 hover:border-gray-800 rounded-xl text-gray-400 hover:text-white transition-all cursor-pointer">
-                  <ChevronRight className="w-4 h-4" />
+                  <FaChevronRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>
@@ -242,20 +242,20 @@ const ReadinessHub = () => {
             <div className="glass-panel p-5 rounded-2xl border border-gray-850 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div className="flex gap-4">
                 <div className="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/25 flex items-center justify-center text-emerald-400 flex-shrink-0">
-                  <Activity className="w-5 h-5" />
+                  <FaRunning className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-sm text-white">Physical Preparation</h4>
-                  <p className="text-[10px] text-gray-500 mt-0.5">Physical test targets and workout logging</p>
+                  <h4 className="font-bold text-base text-white">Physical Preparation</h4>
+                  <p className="text-xs text-gray-400 mt-0.5">Physical test targets and workout logging</p>
                 </div>
               </div>
               <div className="flex items-center gap-5 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-t-0 border-gray-850 pt-3 sm:pt-0">
                 <div className="text-right">
-                  <span className="text-[10px] text-gray-500 block uppercase font-bold">Training Completion</span>
-                  <span className="text-xs font-bold text-emerald-400">{progress.physicalReadiness}% goals met</span>
+                  <span className="text-xs text-gray-400 block uppercase font-bold">Training Completion</span>
+                  <span className="text-sm font-bold text-emerald-400">{progress.physicalReadiness}% goals met</span>
                 </div>
                 <Link to={`/department/${slug}/physical`} className="p-2 border border-gray-850 hover:border-gray-800 rounded-xl text-gray-400 hover:text-white transition-all cursor-pointer">
-                  <ChevronRight className="w-4 h-4" />
+                  <FaChevronRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>
@@ -264,20 +264,20 @@ const ReadinessHub = () => {
             <div className="glass-panel p-5 rounded-2xl border border-gray-850 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div className="flex gap-4">
                 <div className="w-10 h-10 rounded-xl bg-rose-500/15 border border-rose-500/25 flex items-center justify-center text-rose-400 flex-shrink-0">
-                  <HeartPulse className="w-5 h-5" />
+                  <FaHeartbeat className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-sm text-white">Medical Checklist</h4>
-                  <p className="text-[10px] text-gray-500 mt-0.5">Medical fitness checklist pre-validation</p>
+                  <h4 className="font-bold text-base text-white">Medical Checklist</h4>
+                  <p className="text-xs text-gray-400 mt-0.5">Medical fitness checklist pre-validation</p>
                 </div>
               </div>
               <div className="flex items-center gap-5 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-t-0 border-gray-850 pt-3 sm:pt-0">
                 <div className="text-right">
-                  <span className="text-[10px] text-gray-500 block uppercase font-bold">Pre-check Status</span>
-                  <span className="text-xs font-bold text-rose-400">{progress.medicalReadiness}% passed</span>
+                  <span className="text-xs text-gray-400 block uppercase font-bold">Pre-check Status</span>
+                  <span className="text-sm font-bold text-rose-400">{progress.medicalReadiness}% passed</span>
                 </div>
                 <Link to={`/department/${slug}/medical`} className="p-2 border border-gray-850 hover:border-gray-800 rounded-xl text-gray-400 hover:text-white transition-all cursor-pointer">
-                  <ChevronRight className="w-4 h-4" />
+                  <FaChevronRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>

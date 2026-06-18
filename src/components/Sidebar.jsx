@@ -108,11 +108,11 @@ const Sidebar = ({ onClose }) => {
           rel="noopener noreferrer"
           className="flex flex-col gap-2 p-3.5 bg-primary-600/10 border border-primary-500/15 rounded-xl hover:border-primary-500/35 transition-all text-left group"
         >
-          <div className="flex items-center gap-2 text-[10px] uppercase font-black tracking-wider text-primary-400">
+          <div className="flex items-center gap-2 text-xs uppercase font-black tracking-wider text-primary-400">
             <FaLightbulb className="w-4 h-4 animate-pulse" /> Intelligence Prep
           </div>
-          <span className="text-white text-xs font-bold leading-normal">Practice Intelligence Tests</span>
-          <span className="text-[10px] text-gray-500 leading-normal">Access Verbal, Non-Verbal, & Academic practice tests.</span>
+          <span className="text-white text-sm font-bold leading-normal">Practice Intelligence Tests</span>
+          <span className="text-xs text-gray-400 leading-normal">Access Verbal, Non-Verbal, & Academic practice tests.</span>
         </a>
       </div>
     </div>

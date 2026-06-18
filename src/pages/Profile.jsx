@@ -1,6 +1,17 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { User, Calendar, BookOpen, Lock, Loader2, CheckCircle2, AlertCircle, Camera, Eye, EyeOff } from 'lucide-react';
+import {
+  FaUserAlt,
+  FaCalendarAlt,
+  FaBookOpen,
+  FaLock,
+  FaCamera,
+  FaEye,
+  FaEyeSlash,
+  FaSpinner,
+  FaCheckCircle,
+  FaExclamationTriangle,
+} from 'react-icons/fa';
 import { uploadAvatarApi } from '../services/authService';
 
 const Profile = () => {
@@ -118,27 +129,27 @@ const Profile = () => {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-extrabold text-white">Profile & Security Settings</h1>
-        <p className="text-gray-400 text-xs mt-1">Manage your candidate information and change credentials</p>
+        <h1 className="text-3xl font-extrabold text-white">Profile & Security Settings</h1>
+        <p className="text-gray-300 text-sm mt-1">Manage your candidate information and change credentials</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Profile Card */}
         <div className="glass-panel p-8 rounded-2xl space-y-6">
-          <h2 className="text-lg font-bold text-white flex items-center gap-2 border-b border-gray-800/80 pb-3">
-            <User className="w-5 h-5 text-primary-500" /> Candidate Profile Information
+          <h2 className="text-xl font-bold text-white flex items-center gap-2 border-b border-gray-800/80 pb-3">
+            <FaUserAlt className="w-5 h-5 text-primary-500" /> Candidate Profile Information
           </h2>
 
           {profileMessage && (
             <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center gap-3 text-emerald-400 text-sm">
-              <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
+              <FaCheckCircle className="w-5 h-5 flex-shrink-0" />
               <span>{profileMessage}</span>
             </div>
           )}
 
           {profileError && (
             <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-3 text-red-400 text-sm">
-              <AlertCircle className="w-5 h-5 flex-shrink-0" />
+              <FaExclamationTriangle className="w-5 h-5 flex-shrink-0" />
               <span>{profileError}</span>
             </div>
           )}
@@ -148,7 +159,7 @@ const Profile = () => {
             <div className="relative">
               {uploadingAvatar ? (
                 <div className="w-24 h-24 rounded-full bg-gray-900/40 border-2 border-primary-500/30 flex items-center justify-center">
-                  <Loader2 className="w-8 h-8 text-primary-500 animate-spin" />
+                  <FaSpinner className="w-8 h-8 text-primary-500 animate-spin" />
                 </div>
               ) : user?.profileImage ? (
                 <img
@@ -167,7 +178,7 @@ const Profile = () => {
                 className="absolute bottom-0 right-0 p-2 bg-primary-600 hover:bg-primary-500 text-white rounded-full cursor-pointer shadow-lg border border-primary-400/20 transition-all hover:scale-105"
                 title="Upload Profile Image"
               >
-                <Camera className="w-4 h-4" />
+                <FaCamera className="w-4 h-4" />
               </label>
               <input
                 type="file"
@@ -179,17 +190,17 @@ const Profile = () => {
               />
             </div>
             <div className="text-center">
-              <span className="text-[10px] text-gray-500 block uppercase tracking-wider">JPEG, PNG or WEBP (Max. 5MB)</span>
+              <span className="text-xs text-gray-400 block uppercase tracking-wider">JPEG, PNG or WEBP (Max. 5MB)</span>
             </div>
           </div>
 
           <form onSubmit={handleProfileSubmit} className="space-y-4">
             <div>
-              <label className="block text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2">
+              <label className="block text-gray-300 text-sm font-semibold uppercase tracking-wider mb-2">
                 Full Name
               </label>
               <div className="relative">
-                <User className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-500" />
+                <FaUserAlt className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-500" />
                 <input
                   type="text"
                   value={name}
@@ -203,11 +214,11 @@ const Profile = () => {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2">
+                <label className="block text-gray-300 text-sm font-semibold uppercase tracking-wider mb-2">
                   Age (Years)
                 </label>
                 <div className="relative">
-                  <Calendar className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-500" />
+                  <FaCalendarAlt className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-500" />
                   <input
                     type="number"
                     value={age}
@@ -220,11 +231,11 @@ const Profile = () => {
               </div>
 
               <div>
-                <label className="block text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2">
+                <label className="block text-gray-300 text-sm font-semibold uppercase tracking-wider mb-2">
                   Education Level
                 </label>
                 <div className="relative">
-                  <BookOpen className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-500" />
+                  <FaBookOpen className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-500" />
                   <input
                     type="text"
                     value={education}
@@ -244,7 +255,7 @@ const Profile = () => {
             >
               {updatingProfile ? (
                 <>
-                  <Loader2 className="w-5 h-5 animate-spin" /> Saving Profiles...
+                  <FaSpinner className="w-5 h-5 animate-spin" /> Saving Profiles...
                 </>
               ) : (
                 'Save Changes'
@@ -255,31 +266,31 @@ const Profile = () => {
 
         {/* Security / Password Card */}
         <div className="glass-panel p-8 rounded-2xl space-y-6">
-          <h2 className="text-lg font-bold text-white flex items-center gap-2 border-b border-gray-800/80 pb-3">
-            <Lock className="w-5 h-5 text-purple-500" /> Password & Security
+          <h2 className="text-xl font-bold text-white flex items-center gap-2 border-b border-gray-800/80 pb-3">
+            <FaLock className="w-5 h-5 text-purple-500" /> Password & Security
           </h2>
 
           {passwordMessage && (
             <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center gap-3 text-emerald-400 text-sm">
-              <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
+              <FaCheckCircle className="w-5 h-5 flex-shrink-0" />
               <span>{passwordMessage}</span>
             </div>
           )}
 
           {passwordError && (
             <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-3 text-red-400 text-sm">
-              <AlertCircle className="w-5 h-5 flex-shrink-0" />
+              <FaExclamationTriangle className="w-5 h-5 flex-shrink-0" />
               <span>{passwordError}</span>
             </div>
           )}
 
           <form onSubmit={handlePasswordSubmit} className="space-y-4">
             <div>
-              <label className="block text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2">
+              <label className="block text-gray-300 text-sm font-semibold uppercase tracking-wider mb-2">
                 Current Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-500" />
+                <FaLock className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-500" />
                 <input
                   type={showCurrentPassword ? 'text' : 'password'}
                   value={currentPassword}
@@ -295,17 +306,17 @@ const Profile = () => {
                   className="absolute right-3 top-3.5 text-gray-500 hover:text-white transition-colors cursor-pointer"
                   tabIndex={-1}
                 >
-                  {showCurrentPassword ? <EyeOff className="w-4.5 h-4.5" /> : <Eye className="w-4.5 h-4.5" />}
+                  {showCurrentPassword ? <FaEyeSlash className="w-4.5 h-4.5" /> : <FaEye className="w-4.5 h-4.5" />}
                 </button>
               </div>
             </div>
 
             <div>
-              <label className="block text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2">
+              <label className="block text-gray-300 text-sm font-semibold uppercase tracking-wider mb-2">
                 New Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-500" />
+                <FaLock className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-500" />
                 <input
                   type={showNewPassword ? 'text' : 'password'}
                   value={newPassword}
@@ -321,7 +332,7 @@ const Profile = () => {
                   className="absolute right-3 top-3.5 text-gray-500 hover:text-white transition-colors cursor-pointer"
                   tabIndex={-1}
                 >
-                  {showNewPassword ? <EyeOff className="w-4.5 h-4.5" /> : <Eye className="w-4.5 h-4.5" />}
+                  {showNewPassword ? <FaEyeSlash className="w-4.5 h-4.5" /> : <FaEye className="w-4.5 h-4.5" />}
                 </button>
               </div>
             </div>
@@ -333,7 +344,7 @@ const Profile = () => {
             >
               {updatingPassword ? (
                 <>
-                  <Loader2 className="w-5 h-5 animate-spin" /> Updating Security...
+                  <FaSpinner className="w-5 h-5 animate-spin" /> Updating Security...
                 </>
               ) : (
                 'Update Password'

@@ -4,18 +4,18 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSelection } from '../context/SelectionContext';
 import api from '../services/api';
 import {
-  MessageSquare,
-  History,
-  Timer as TimerIcon,
-  CheckCircle,
-  HelpCircle,
-  ArrowRight,
-  Loader2,
-  Trash2,
-  Lock,
-  Mic,
-  Keyboard
-} from 'lucide-react';
+  FaComments,
+  FaHistory,
+  FaRegClock,
+  FaCheckCircle,
+  FaQuestionCircle,
+  FaArrowRight,
+  FaSpinner,
+  FaTrashAlt,
+  FaLock,
+  FaMicrophone,
+  FaKeyboard,
+} from 'react-icons/fa';
 
 const MockInterviews = () => {
   const queryClient = useQueryClient();
@@ -156,6 +156,7 @@ const MockInterviews = () => {
       setAnswerText('');
       setFeedback(null);
       setSessionState('active');
+      startTimer();
     } else {
       setSessionState('finished');
       queryClient.invalidateQueries(['interviewHistory']);
@@ -172,7 +173,7 @@ const MockInterviews = () => {
   if (!selectedDepartment) {
     return (
       <div className="glass-panel p-10 rounded-2xl text-center space-y-5 max-w-lg mx-auto">
-        <Lock className="w-12 h-12 text-primary-500 mx-auto" />
+        <FaLock className="w-12 h-12 text-primary-500 mx-auto" />
         <h2 className="text-xl font-bold text-white">Target Department Required</h2>
         <p className="text-gray-300 text-sm leading-relaxed">
           You must select your active target department before simulating mock board interviews.
@@ -182,7 +183,7 @@ const MockInterviews = () => {
             to="/departments"
             className="inline-flex items-center gap-1.5 px-6 py-3.5 bg-primary-600 hover:bg-primary-500 text-white font-bold rounded-xl text-sm transition-all shadow-md"
           >
-            Select Department <ArrowRight className="w-4 h-4" />
+            Select Department <FaArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </div>
@@ -192,7 +193,7 @@ const MockInterviews = () => {
   if (sessionState === 'loading') {
     return (
       <div className="glass-panel p-12 rounded-2xl text-center space-y-6 max-w-xl mx-auto py-20">
-        <Loader2 className="w-12 h-12 text-primary-500 animate-spin mx-auto" />
+        <FaSpinner className="w-12 h-12 text-primary-500 animate-spin mx-auto" />
         <div className="space-y-2">
           <h2 className="text-xl font-bold text-white">Loading Interview Questions</h2>
           <p className="text-gray-300 text-sm max-w-sm mx-auto leading-relaxed">
@@ -221,7 +222,7 @@ const MockInterviews = () => {
                 </span>
               </div>
               <div className="flex items-center gap-1.5 text-sm text-gray-400 font-mono">
-                <TimerIcon className="w-4 h-4" /> {formatTime(secondsElapsed)}
+                <FaRegClock className="w-4 h-4" /> {formatTime(secondsElapsed)}
               </div>
             </div>
 
@@ -255,11 +256,11 @@ const MockInterviews = () => {
                   >
                     {isSubmitting ? (
                       <>
-                        <Loader2 className="w-4 h-4 animate-spin" /> Evaluating...
+                        <FaSpinner className="w-4 h-4 animate-spin" /> Evaluating...
                       </>
                     ) : (
                       <>
-                        Submit Response <ArrowRight className="w-4 h-4" />
+                        Submit Response <FaArrowRight className="w-4 h-4" />
                       </>
                     )}
                   </button>
@@ -306,11 +307,11 @@ const MockInterviews = () => {
               >
                 {currentQuestionIdx === currentSession.questions.length - 1 ? (
                   <>
-                    Finish Interview <CheckCircle className="w-4 h-4" />
+                    Finish Interview <FaCheckCircle className="w-4 h-4" />
                   </>
                 ) : (
                   <>
-                    Next Question <ArrowRight className="w-4 h-4" />
+                    Next Question <FaArrowRight className="w-4 h-4" />
                   </>
                 )}
               </button>
@@ -325,7 +326,7 @@ const MockInterviews = () => {
     return (
       <div className="glass-panel p-8 rounded-2xl text-center space-y-6 max-w-md mx-auto">
         <div className="w-16 h-16 bg-emerald-500/10 border border-emerald-500/20 rounded-full flex items-center justify-center mx-auto text-emerald-500">
-          <CheckCircle className="w-8 h-8" />
+          <FaCheckCircle className="w-8 h-8" />
         </div>
         <div className="space-y-2">
           <h2 className="text-xl font-bold text-white">Interview Simulation Complete</h2>
@@ -357,9 +358,9 @@ const MockInterviews = () => {
       <div className="glass-panel p-8 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div className="space-y-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-purple-600/15 border border-purple-500/20 rounded-full text-xs font-semibold text-purple-400">
-            <MessageSquare className="w-4 h-4" /> Real-time Simulation
+            <FaComments className="w-4 h-4" /> Real-time Simulation
           </div>
-          <h1 className="text-2xl font-extrabold text-white">
+          <h1 className="text-3xl font-extrabold text-white">
             Active Target: <span className="text-primary-500">{selectedPosition || selectedDepartment.name}</span>
           </h1>
           <p className="text-gray-300 text-base max-w-xl">
@@ -372,14 +373,14 @@ const MockInterviews = () => {
             onClick={() => handleStartInterview(false)}
             className="flex items-center gap-1.5 px-5 py-3.5 border border-gray-800 hover:border-gray-750 bg-gray-900/40 text-white text-sm font-bold rounded-xl transition-all hover:bg-gray-900 cursor-pointer"
           >
-            <Keyboard className="w-4 h-4 text-gray-400" /> Standard Written Board
+            <FaKeyboard className="w-4 h-4 text-gray-400" /> Standard Written Board
           </button>
           
           <button
             onClick={() => handleStartInterview(true)}
             className="flex items-center gap-1.5 px-6 py-3.5 bg-primary-600 hover:bg-primary-500 active:bg-primary-700 text-white text-sm font-bold rounded-xl transition-all shadow-lg hover:shadow-primary-500/20 cursor-pointer"
           >
-            <Mic className="w-4 h-4 fill-current" /> Start Voice Board Mode
+            <FaMicrophone className="w-4 h-4" /> Start Voice Board Mode
           </button>
         </div>
       </div>
@@ -387,18 +388,18 @@ const MockInterviews = () => {
       <div className="space-y-4">
         <div>
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
-            <History className="w-5 h-5 text-primary-400" /> Historical Session Logs
+            <FaHistory className="w-5 h-5 text-primary-400" /> Historical Session Logs
           </h2>
           <p className="text-gray-300 text-sm mt-1">Review scores and comments of your past interview attempts</p>
         </div>
 
         {loadingHistory ? (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="w-8 h-8 text-primary-500 animate-spin" />
+            <FaSpinner className="w-8 h-8 text-primary-500 animate-spin" />
           </div>
         ) : !historyData || historyData.length === 0 ? (
           <div className="glass-panel p-8 rounded-2xl border border-gray-850 text-center space-y-3">
-            <HelpCircle className="w-12 h-12 text-gray-750 mx-auto" />
+            <FaQuestionCircle className="w-12 h-12 text-gray-750 mx-auto" />
             <h4 className="font-bold text-white">No Sessions Found</h4>
             <p className="text-gray-400 text-sm max-w-sm mx-auto leading-relaxed">
               You haven't completed any mock interview simulation sessions yet.
@@ -413,7 +414,7 @@ const MockInterviews = () => {
                   className="absolute top-5 right-5 p-2 border border-red-500/10 hover:border-red-500/20 bg-red-500/5 hover:bg-red-500/10 rounded-lg text-red-400 hover:text-red-300 transition-all opacity-0 group-hover:opacity-100 cursor-pointer"
                   title="Delete Session"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <FaTrashAlt className="w-4 h-4" />
                 </button>
 
                 <div className="space-y-3">
