@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
@@ -19,6 +19,14 @@ import {
 
 const Landing = () => {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  // Redirect authenticated users directly to dashboard
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [user, navigate]);
 
   const [isDark, setIsDark] = useState(() => {
     const saved = localStorage.getItem('theme');
