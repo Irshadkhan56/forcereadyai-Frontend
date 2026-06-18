@@ -245,6 +245,43 @@ const Landing = () => {
         </motion.div>
       </section>
 
+      {/* VERBAL/NON-VERBAL INTELLIGENCE PREPARATION BANNER */}
+      <section className="relative z-10 w-full max-w-6xl mx-auto px-6 py-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="glass-panel p-6 rounded-2xl border border-primary-500/20 bg-gradient-to-r from-primary-950/20 to-purple-950/20 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden group"
+        >
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary-600/5 rounded-full blur-2xl pointer-events-none group-hover:bg-primary-600/10 transition-all" />
+          <div className="flex items-center gap-4 text-left">
+            <div className="w-12 h-12 rounded-xl bg-primary-600/15 border border-primary-500/25 flex items-center justify-center text-primary-400 flex-shrink-0">
+              <Award className="w-6 h-6 animate-pulse" />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                Verbal & Non-Verbal Intelligence Test Prep
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-semibold uppercase tracking-wider">
+                  Recommended Practice
+                </span>
+              </h3>
+              <p className="text-gray-400 text-xs mt-1 leading-relaxed max-w-2xl">
+                Prepare yourself for the academic, verbal, and non-verbal intelligence tests. Click below to access specialized practice tests and guidelines.
+              </p>
+            </div>
+          </div>
+          <a
+            href="https://verbalintelligence.forceready.ai" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full md:w-auto px-5 py-3 bg-gradient-to-r from-primary-600 to-purple-650 hover:from-primary-500 hover:to-purple-550 active:scale-95 text-white font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer flex-shrink-0"
+          >
+            Start Intelligence Prep <ArrowRight className="w-4 h-4" />
+          </a>
+        </motion.div>
+      </section>
+
       {/* FEATURES SECTION */}
       <section className="relative z-10 w-full max-w-6xl mx-auto px-6 py-20 border-t border-gray-900/60">
         <div className="text-center space-y-3 mb-16">
