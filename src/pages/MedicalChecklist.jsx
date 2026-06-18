@@ -146,18 +146,18 @@ const MedicalChecklist = () => {
           <h1 className="text-2xl font-extrabold text-white">
             Medical Standards: <span className="text-rose-500">{selectedDepartment?.name}{selectedPosition ? ` - ${selectedPosition}` : ''}</span>
           </h1>
-          <p className="text-gray-400 text-sm max-w-xl">
+          <p className="text-gray-300 text-base max-w-xl">
             Pre-validate your physical dimensions, height requirements, and visual health guidelines before the official service board clinical exams.
           </p>
         </div>
 
         {/* Circular indicator or Badge */}
-        <div className="bg-gray-900/40 p-5 rounded-2xl border border-gray-850 flex items-center gap-4 relative z-10 flex-shrink-0">
+        <div className="bg-gray-900/40 p-6 rounded-2xl border border-gray-850 flex items-center gap-5 relative z-10 flex-shrink-0">
           <div className="space-y-1">
-            <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider block">Passed Standards</span>
-            <div className="text-lg font-black text-white">{passedCount} <span className="text-xs text-gray-500">/ {totalCount} Items</span></div>
+            <span className="text-xs text-gray-400 font-bold uppercase tracking-wider block">Passed Standards</span>
+            <div className="text-2xl font-black text-white">{passedCount} <span className="text-sm text-gray-400 font-semibold">/ {totalCount} Items</span></div>
           </div>
-          <div className="w-12 h-12 rounded-full border-4 border-rose-500/20 flex items-center justify-center font-bold text-xs text-rose-400 relative">
+          <div className="w-14 h-14 rounded-full border-4 border-rose-500/20 flex items-center justify-center font-bold text-sm text-rose-400 relative">
             <span className="absolute inset-0 border-4 border-rose-500 rounded-full border-t-transparent animate-spin-slow pointer-events-none" style={{ borderTopColor: 'transparent', borderLeftColor: 'transparent' }} />
             {passedPercent}%
           </div>
@@ -166,11 +166,11 @@ const MedicalChecklist = () => {
 
       {/* METRIC PROGRESS BAR */}
       <div className="space-y-2">
-        <div className="flex justify-between items-center text-xs">
-          <span className="text-gray-400 font-semibold uppercase tracking-wider">Overall Passed Checklist</span>
+        <div className="flex justify-between items-center text-sm font-semibold uppercase tracking-wider">
+          <span className="text-gray-300">Overall Passed Checklist</span>
           <span className="font-bold text-rose-400">{passedPercent}% Verified</span>
         </div>
-        <div className="w-full h-3 bg-gray-900 rounded-full overflow-hidden border border-gray-850">
+        <div className="w-full h-4 bg-gray-900 rounded-full overflow-hidden border border-gray-850/80">
           <div
             className="h-full bg-gradient-to-r from-rose-500 to-red-400 rounded-full transition-all duration-500"
             style={{ width: `${passedPercent}%` }}
@@ -181,10 +181,10 @@ const MedicalChecklist = () => {
       {/* CHECKLIST SECTION */}
       <div className="space-y-4">
         <div>
-          <h2 className="text-lg font-bold text-white flex items-center gap-2">
-            <ClipboardList className="w-5 h-5 text-gray-500" /> Physical Standards & Conditions
+          <h2 className="text-xl font-bold text-white flex items-center gap-2">
+            <ClipboardList className="w-5 h-5 text-rose-400" /> Physical Standards & Conditions
           </h2>
-          <p className="text-gray-500 text-xs mt-0.5">Toggle criteria statuses and log clinical notes from doctor visits</p>
+          <p className="text-gray-300 text-sm mt-1">Toggle criteria statuses and log clinical notes from doctor visits</p>
         </div>
 
         <div className="space-y-4">
@@ -212,12 +212,12 @@ const MedicalChecklist = () => {
                   <div className="space-y-2 flex-1">
                     <div className="flex items-center gap-2">
                       <span className={`w-2.5 h-2.5 rounded-full ${cr.status === 'passed' ? 'bg-emerald-500' : cr.status === 'failed' ? 'bg-red-500' : 'bg-gray-700'}`} />
-                      <h4 className="font-bold text-sm text-white">{cr.name}</h4>
-                      <span className={`text-[10px] px-2 py-0.5 rounded-md border font-semibold tracking-wide uppercase ${statusColor}`}>
+                      <h4 className="font-bold text-base text-white">{cr.name}</h4>
+                      <span className={`text-xs px-2.5 py-1 rounded-md border font-semibold tracking-wide uppercase ${statusColor}`}>
                         {cr.status}
                       </span>
                     </div>
-                    <div className="text-xs text-gray-400 leading-relaxed">
+                    <div className="text-sm text-gray-300 leading-relaxed">
                       Official Guideline: <span className="text-white font-semibold">{cr.requirement}</span>
                     </div>
                   </div>
@@ -246,23 +246,23 @@ const MedicalChecklist = () => {
                   <div className="space-y-4 pt-3 border-t border-gray-800/80 animate-fadeIn">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-gray-500 text-[10px] uppercase font-bold tracking-wider mb-1">Clinic / Doctor Notes</label>
+                        <label className="block text-gray-300 text-xs font-bold tracking-wider mb-1">Clinic / Doctor Notes</label>
                         <input
                           type="text"
                           value={currentNotes}
                           onChange={(e) => setCurrentNotes(e.target.value)}
                           placeholder="e.g. Vision verified 6/6 by civil hospital"
-                          className="w-full glass-input rounded-xl px-3 py-2 text-xs text-white focus:outline-none"
+                          className="w-full glass-input rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none"
                           required
                         />
                       </div>
 
                       <div>
-                        <label className="block text-gray-500 text-[10px] uppercase font-bold tracking-wider mb-1">Verify Status</label>
+                        <label className="block text-gray-300 text-xs font-bold tracking-wider mb-1">Verify Status</label>
                         <select
                           value={currentStatus}
                           onChange={(e) => setCurrentStatus(e.target.value)}
-                          className="w-full glass-input rounded-xl px-3 py-2 text-xs text-white focus:outline-none"
+                          className="w-full glass-input rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none"
                         >
                           <option value="unchecked">Unchecked</option>
                           <option value="passed">Passed</option>
@@ -271,17 +271,17 @@ const MedicalChecklist = () => {
                       </div>
                     </div>
 
-                    <div className="flex justify-end gap-2 text-xs">
+                    <div className="flex justify-end gap-2 text-sm">
                       <button
                         onClick={() => setEditingId(null)}
-                        className="px-3.5 py-2 border border-gray-800 hover:border-gray-750 bg-gray-900 text-gray-400 hover:text-white rounded-lg transition-all cursor-pointer"
+                        className="px-4 py-2.5 border border-gray-800 hover:border-gray-750 bg-gray-900 text-gray-400 hover:text-white rounded-lg transition-all cursor-pointer"
                       >
                         Cancel
                       </button>
                       <button
                         onClick={() => handleSave(cr._id)}
                         disabled={saving}
-                        className="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-lg transition-all flex items-center gap-1 shadow-md hover:shadow-rose-500/10 cursor-pointer"
+                        className="px-5 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-lg transition-all flex items-center gap-1 shadow-md hover:shadow-rose-500/10 cursor-pointer"
                       >
                         {saving ? (
                           <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -294,10 +294,10 @@ const MedicalChecklist = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex items-center justify-between pt-3 border-t border-gray-850/80 text-xs">
-                    <div className="flex items-center gap-1 text-gray-500 min-w-0">
+                  <div className="flex items-center justify-between pt-3 border-t border-gray-850/80 text-sm">
+                    <div className="flex items-center gap-1 text-gray-400 min-w-0">
                       <span className="flex-shrink-0">Clinic Logs:</span>
-                      <span className="text-gray-300 italic truncate max-w-[400px] block pl-1">
+                      <span className="text-gray-200 italic truncate max-w-[400px] block pl-1">
                         {cr.notes || 'No notes added yet'}
                       </span>
                     </div>

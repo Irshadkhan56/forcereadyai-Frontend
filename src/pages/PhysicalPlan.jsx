@@ -143,18 +143,18 @@ const PhysicalPlan = () => {
           <h1 className="text-2xl font-extrabold text-white">
             Physical Preparation Plan: <span className="text-emerald-500">{selectedDepartment?.name}{selectedPosition ? ` - ${selectedPosition}` : ''}</span>
           </h1>
-          <p className="text-gray-400 text-sm max-w-xl">
+          <p className="text-gray-300 text-base max-w-xl">
             Complete the targets set by selection boards. Keep track of your timing records and reps to secure physical clearance.
           </p>
         </div>
 
         {/* Circular indicator or Badge */}
-        <div className="bg-gray-900/40 p-5 rounded-2xl border border-gray-850 flex items-center gap-4 relative z-10 flex-shrink-0">
+        <div className="bg-gray-900/40 p-6 rounded-2xl border border-gray-850 flex items-center gap-5 relative z-10 flex-shrink-0">
           <div className="space-y-1">
-            <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider block">Training Completed</span>
-            <div className="text-lg font-black text-white">{completedCount} <span className="text-xs text-gray-500">/ {totalCount} Goals</span></div>
+            <span className="text-xs text-gray-400 font-bold uppercase tracking-wider block">Training Completed</span>
+            <div className="text-2xl font-black text-white">{completedCount} <span className="text-sm text-gray-400 font-semibold">/ {totalCount} Goals</span></div>
           </div>
-          <div className="w-12 h-12 rounded-full border-4 border-emerald-500/20 flex items-center justify-center font-bold text-xs text-emerald-400 relative">
+          <div className="w-14 h-14 rounded-full border-4 border-emerald-500/20 flex items-center justify-center font-bold text-sm text-emerald-400 relative">
             <span className="absolute inset-0 border-4 border-emerald-500 rounded-full border-t-transparent animate-spin-slow pointer-events-none" style={{ borderTopColor: 'transparent', borderLeftColor: 'transparent' }} />
             {progressPercent}%
           </div>
@@ -163,11 +163,11 @@ const PhysicalPlan = () => {
 
       {/* METRIC PROGRESS BAR */}
       <div className="space-y-2">
-        <div className="flex justify-between items-center text-xs">
-          <span className="text-gray-400 font-semibold uppercase tracking-wider">Overall Training Metric</span>
+        <div className="flex justify-between items-center text-sm font-semibold uppercase tracking-wider">
+          <span className="text-gray-300">Overall Training Metric</span>
           <span className="font-bold text-emerald-400">{progressPercent}% Completed</span>
         </div>
-        <div className="w-full h-3 bg-gray-900 rounded-full overflow-hidden border border-gray-850">
+        <div className="w-full h-4 bg-gray-900 rounded-full overflow-hidden border border-gray-850/80">
           <div
             className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500"
             style={{ width: `${progressPercent}%` }}
@@ -178,10 +178,10 @@ const PhysicalPlan = () => {
       {/* WORKOUT LIST GRID */}
       <div className="space-y-4">
         <div>
-          <h2 className="text-lg font-bold text-white flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-gray-500" /> Core Physical Standards
+          <h2 className="text-xl font-bold text-white flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-emerald-400" /> Core Physical Standards
           </h2>
-          <p className="text-gray-500 text-xs mt-0.5">Click edit to save your current timing metrics and mark tasks complete</p>
+          <p className="text-gray-300 text-sm mt-1">Click edit to save your current timing metrics and mark tasks complete</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -202,9 +202,9 @@ const PhysicalPlan = () => {
                   <div className="space-y-2 flex-1">
                     <div className="flex items-center gap-2">
                       <span className={`w-2.5 h-2.5 rounded-full ${ex.completed ? 'bg-emerald-500 shadow-md shadow-emerald-500/50' : 'bg-gray-700'}`} />
-                      <h4 className="font-bold text-sm text-white">{ex.name}</h4>
+                      <h4 className="font-bold text-base text-white">{ex.name}</h4>
                     </div>
-                    <div className="text-xs text-gray-400 leading-relaxed">
+                    <div className="text-sm text-gray-300 leading-relaxed">
                       Target standard: <span className="text-white font-semibold">{ex.target}</span>
                     </div>
                   </div>
@@ -224,18 +224,18 @@ const PhysicalPlan = () => {
                   <div className="space-y-4 pt-3 border-t border-gray-800/80 animate-fadeIn">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-gray-500 text-[10px] uppercase font-bold tracking-wider mb-1">Your Value</label>
+                        <label className="block text-gray-300 text-xs font-bold tracking-wider mb-1">Your Value</label>
                         <input
                           type="text"
                           value={currentVal}
                           onChange={(e) => setCurrentVal(e.target.value)}
                           placeholder="e.g. 7m 30s or 40 reps"
-                          className="w-full glass-input rounded-xl px-3 py-2 text-xs text-white focus:outline-none"
+                          className="w-full glass-input rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none"
                           required
                         />
                       </div>
                       <div className="flex items-end pl-1 pb-1">
-                        <label className="flex items-center gap-2 text-xs text-gray-300 font-semibold cursor-pointer">
+                        <label className="flex items-center gap-2 text-sm text-gray-300 font-semibold cursor-pointer">
                           <input
                             type="checkbox"
                             checked={isDone}
@@ -246,17 +246,17 @@ const PhysicalPlan = () => {
                         </label>
                       </div>
                     </div>
-                    <div className="flex justify-end gap-2 text-xs">
+                    <div className="flex justify-end gap-2 text-sm">
                       <button
                         onClick={() => setEditingId(null)}
-                        className="px-3.5 py-2 border border-gray-800 hover:border-gray-750 bg-gray-900 text-gray-400 hover:text-white rounded-lg transition-all cursor-pointer"
+                        className="px-4 py-2.5 border border-gray-800 hover:border-gray-750 bg-gray-900 text-gray-400 hover:text-white rounded-lg transition-all cursor-pointer"
                       >
                         Cancel
                       </button>
                       <button
                         onClick={() => handleSave(ex._id)}
                         disabled={saving}
-                        className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg transition-all flex items-center gap-1 shadow-md hover:shadow-emerald-500/10 cursor-pointer"
+                        className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg transition-all flex items-center gap-1 shadow-md hover:shadow-emerald-500/10 cursor-pointer"
                       >
                         {saving ? (
                           <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -269,9 +269,9 @@ const PhysicalPlan = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex items-center justify-between pt-3 border-t border-gray-850/80 text-xs">
-                    <span className="text-gray-500">
-                      Your performance: <span className="text-gray-300 font-semibold">{ex.currentValue || 'No log yet'}</span>
+                  <div className="flex items-center justify-between pt-3 border-t border-gray-850/80 text-sm">
+                    <span className="text-gray-400">
+                      Your performance: <span className="text-gray-200 font-semibold">{ex.currentValue || 'No log yet'}</span>
                     </span>
                     <button
                       onClick={() => handleEditStart(ex)}
