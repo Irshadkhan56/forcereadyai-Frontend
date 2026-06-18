@@ -218,7 +218,7 @@ const Landing = () => {
         >
           <div className="glass-panel p-2 rounded-2xl shadow-3xl border border-gray-800/60 overflow-hidden relative group">
             <div className="absolute inset-0 bg-gradient-to-tr from-primary-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-            <div className="bg-dark-900 rounded-xl p-8 text-left grid grid-cols-1 md:grid-cols-3 gap-6 border border-gray-800/40">
+            <div className="bg-gray-950/45 dark:bg-dark-900 rounded-xl p-8 text-left grid grid-cols-1 md:grid-cols-3 gap-6 border border-gray-800/40">
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-primary-400 text-xs font-bold uppercase tracking-wider">
                   <span className="w-2 h-2 bg-primary-500 rounded-full animate-ping" /> Department Selection
