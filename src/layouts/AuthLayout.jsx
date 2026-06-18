@@ -42,7 +42,7 @@ const AuthLayout = () => {
 
           {/* App Logo */}
           <Link to="/" className="flex flex-col items-center mb-6 hover:opacity-90 group transition-all">
-            <img src={logoImg} alt="ForceReady.AI Logo" className="h-24 w-auto mb-2 group-hover:scale-105 transition-all" />
+            <img src={logoImg} alt="ForceReady.AI Logo" className="h-28 w-auto mb-2 group-hover:scale-105 transition-all" />
             <p className="text-gray-400 text-sm font-medium">Defense & Civil Services Preparation Hub</p>
           </Link>
 

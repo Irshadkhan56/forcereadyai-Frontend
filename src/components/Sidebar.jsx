@@ -69,7 +69,7 @@ const Sidebar = ({ onClose }) => {
     <div className="flex flex-col h-full">
       {/* Brand logo header */}
       <Link to="/dashboard" className="flex items-center mb-8 px-2" onClick={onClose}>
-        <img src={logoImg} alt="ForceReady.AI Logo" className="h-10 w-auto hover:opacity-90 transition-all" />
+        <img src={logoImg} alt="ForceReady.AI Logo" className="h-14 w-auto hover:opacity-90 transition-all" />
       </Link>
 
       {/* Navigation menu */}

@@ -129,7 +129,7 @@ const Landing = () => {
       {/* HEADER NAVBAR */}
       <header className="relative z-10 w-full max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <img src={logoImg} alt="ForceReady.AI Logo" className="h-10 w-auto" />
+          <img src={logoImg} alt="ForceReady.AI Logo" className="h-16 w-auto" />
         </div>
 
         <div className="flex items-center gap-4">
@@ -404,7 +404,7 @@ const Landing = () => {
       <footer className="relative z-10 w-full border-t border-gray-900/60 bg-dark-950/80 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-6 py-12 flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-gray-500">
           <div className="flex items-center gap-2">
-            <img src={logoImg} alt="ForceReady.AI Logo" className="h-8 w-auto" />
+            <img src={logoImg} alt="ForceReady.AI Logo" className="h-12 w-auto" />
           </div>
 
           <p>© {new Date().getFullYear()} ForceReady AI. All rights reserved. Prepared for Defense & Administrative Services.</p>
