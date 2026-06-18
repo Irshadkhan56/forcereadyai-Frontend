@@ -272,7 +272,7 @@ const Landing = () => {
             </div>
           </div>
           <a
-            href="https://verbalintelligence.forceready.ai" 
+            href="https://smart-prep-ai-jet.vercel.app" 
             target="_blank"
             rel="noopener noreferrer"
             className="w-full md:w-auto px-5 py-3 bg-gradient-to-r from-primary-600 to-purple-650 hover:from-primary-500 hover:to-purple-550 active:scale-95 text-white font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer flex-shrink-0"

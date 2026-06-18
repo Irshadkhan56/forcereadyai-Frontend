@@ -147,7 +147,7 @@ const Dashboard = () => {
           </div>
         </div>
         <a
-          href="https://verbalintelligence.forceready.ai" 
+          href="https://smart-prep-ai-jet.vercel.app" 
           target="_blank"
           rel="noopener noreferrer"
           className="px-4 py-2 border border-primary-500/30 hover:border-primary-500 bg-primary-500/10 hover:bg-primary-500/20 text-white text-[10px] font-bold rounded-lg transition-all flex items-center gap-1 cursor-pointer w-full sm:w-auto justify-center"
