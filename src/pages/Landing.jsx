@@ -190,7 +190,7 @@ const Landing = () => {
             <TrendingUp className="w-3.5 h-3.5" /> Next-Gen Forces Recruitment Prep
           </div>
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white leading-tight max-w-4xl mx-auto">
-            Secure Your Commission with <span className="text-gradient">Gemini-Powered</span> Validation
+            Secure Your Commission with <span className="text-gradient">AI-Powered Smart Interview</span> Prep
           </h1>
           <p className="text-gray-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
             The ultimate simulation and progress hub for candidates preparing for ISSB, police boards, intelligence bureaus, and armed forces entry stages.
